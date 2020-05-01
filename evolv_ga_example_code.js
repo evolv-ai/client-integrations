@@ -23,12 +23,28 @@ function evolvLog(e) {
         var evolvEID = e.planId.split(':')[1];
         console.log(evolvUID, evolvCID, evolvEID);
 
-        // Google Analytics - replace values
-        evolvGA('UA-XXXXXXXXX-Y', {'A': evolvEID, 'B': evolvCID, 'C': evolvUID});
+        // Uncomment one of the following for GA and replace values
+        // with your own
 
-        evolvPreload.addLogEntry('ga', e);
+        // GA with no namespace
+        //
+        // evolvGA('UA-XXXXXXXXX-Y', {'A': evolvEID, 'B': evolvCID, 'C': evolvUID});
+
+        // Pass namespace in if configured
+        //
+        // evolvGA('UA-XXXXXXXXX-Y', {'A': evolvEID, 'B': evolvCID, 'C': evolvUID}, 'NAMESPACE');
+
+        // Uncomment to see confirmation of the GA call in the console
+        //
+        // evolvPreload.addLogEntry('ga', e);
     });
 }
+
+// All listeners configured to log their arguments
+// to the console except 'rendered', which triggers
+// a GA event with Evolv data attached in custom
+// dimensions. Remove any that the customer does
+// not want firing.
 
 window.evolvPreload = {
     listeners: {
@@ -76,9 +92,7 @@ window.evolvPreload = {
     addLogEntry
 };
 
-let num = 1;
-
 function addLogEntry(type, message) {
     message = (typeof message === 'string') ? message : JSON.stringify(message);
-	console.log(type, message);
+    console.log(type, message);
 }
