@@ -81,5 +81,5 @@ function notRenderedHook(event) {
 }
 
 window.evolvPreload.listeners.rendered = renderedHook;
-window.evolvPreload.listeners.notrendered = renderedHook;
+window.evolvPreload.listeners.notrendered = notRenderedHook;
 window.evolvPreload.logEvent = logEvent;
