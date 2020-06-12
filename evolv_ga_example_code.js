@@ -1,9 +1,4 @@
-function evolvGA(id, metrics, namespace) {
-    var ga = window.ga;
-    if (!ga) {
-        console.error('NO GA!!');
-        return;
-    }
+function _evolvGA(id, metrics, namespace) {
     var prefix = namespace ? namespace + '.' : '';
     try {
         ga('create', id, 'auto', namespace ? { namespace } : null);
@@ -16,6 +11,24 @@ function evolvGA(id, metrics, namespace) {
     }
 }
 
+function evolvGA(id, metrics, namespace) {
+    var interval = setInterval( function() {
+        if (window.ga) {
+            _evolvGA(id, metrics, namespace);
+            clearInterval(interval);
+        }
+    }, 100);
+
+    setTimeout(function() {
+        if (window.ga) {
+            console.error('GA not found in 10s after page load');
+            return;
+        }
+        clearInterval(interval);
+    }, 10000)
+}
+
+// TODO: create initialize method where stuff gets pulled in, allowing us to make an npm module to include
 function evolvLog(e) {
     evolv.runtime.then(function(runtime) {
         var evolvUID = runtime.audience.cookie['evolv:uid']
@@ -36,63 +49,37 @@ function evolvLog(e) {
 
         // Uncomment to see confirmation of the GA call in the console
         //
-        // evolvPreload.addLogEntry('ga', e);
+        // evolvPreload.logEvent('ga', e);
     });
 }
 
-// All listeners configured to log their arguments
-// to the console except 'rendered', which triggers
-// a GA event with Evolv data attached in custom
-// dimensions. Remove any that the customer does
-// not want firing.
+// Don't blow away existing preload
+if (!window.evolvPreload) {
+    window.evolvPreload = {};
+}
 
-window.evolvPreload = {
-    listeners: {
-        initialize: function(event) {
-            addLogEntry('initialize', event);
-        },
+// Don't blow away pre-installed listeners
+if (!window.evolvPreload.listeners) {
+    window.evolvPreload.listeners = {};
+}
 
-        initialized: function(event) {
-            addLogEntry('initialized', event);
-        },
+// Only add rendered / notrendered, users can add more hooks
+// if they would like to. (https://media.evolv.ai/releases/latest/docs/pages/lifecycle.html)
 
-        activated: function(event) {
-            addLogEntry('activated', event);
-        },
-
-        reverted: function(event) {
-            addLogEntry('reverted', event);
-        },
-
-        filtered: function(event) {
-            addLogEntry('filtered', event);
-        },
-
-        selected: function(event) {
-            addLogEntry('selected', event);
-        },
-
-        rendered: function(event) {
-            addLogEntry('rendered', event);
-            evolvLog(event);
-        },
-
-        notrendered: function(event) {
-            addLogEntry('notrendered', event);
-        },
-
-        reconciled: function(event) {
-            addLogEntry('reconciled', event);
-        },
-
-        stagecompleted: function(event) {
-            addLogEntry('stagecompleted', event);
-        },
-    },
-    addLogEntry
-};
-
-function addLogEntry(type, message) {
+function logEvent(type, message) {
     message = (typeof message === 'string') ? message : JSON.stringify(message);
     console.log(type, message);
 }
+
+function renderedHook(event) {
+    logEvent('rendered', event);
+    evolvLog(event);
+}
+
+function notRenderedHook(event) {
+    logEvent('notrendered', event);
+}
+
+window.evolvPreload.listeners.rendered = renderedHook;
+window.evolvPreload.listeners.notrendered = renderedHook;
+window.evolvPreload.logEvent = logEvent;
