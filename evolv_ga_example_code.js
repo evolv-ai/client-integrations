@@ -20,9 +20,8 @@ function evolvGA(id, metrics, namespace) {
     }, 100);
 
     setTimeout(function() {
-        if (window.ga) {
+        if (!window.ga) {
             console.error('GA not found in 10s after page load');
-            return;
         }
         clearInterval(interval);
     }, 10000)
