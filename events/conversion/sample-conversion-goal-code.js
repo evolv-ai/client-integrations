@@ -20,7 +20,7 @@ selector.addEventListener("click", function() {
 })
 
 /****
- * Trigger conversion on page load event. 
+ * Trigger conversion on page load event, e.g. order confirmation.
  ****/
 document.addEventListener("DOMContentLoaded", function() {
     evolvConversion();
