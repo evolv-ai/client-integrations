@@ -4,8 +4,9 @@
  * Sample conversion method
  ****/
 function evolvConversion() {
-    evolv.runtime.then(function(runtime) {
-        runtime.emitEvent('[event-name]');
+    // Note: (await evolv.runtime) is not compatible with IE 11
+    evolv.runtime.then(function(rt) {
+        rt.emitEvent('[event-name]'); // event name is set in the Manager
     });
 };
 
