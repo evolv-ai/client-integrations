@@ -1,7 +1,7 @@
 // Evolv 1.0 Conversion
 
 /****
- * Sample conversion method
+ * Execution Plan conversion method
  ****/
 function evolvConversion() {
     // Note: (await evolv.runtime) is not compatible with IE 11
@@ -11,7 +11,7 @@ function evolvConversion() {
 };
 
 /****
- * Selector click event. 
+ * Execution Plan click event. 
  * Reference the appropriate selector.
  ****/
 var selector = document.querySelector("#cta");
