@@ -3,7 +3,7 @@ function _evolvGA(id, metrics, namespace) {
     try {
         ga('create', id, 'auto', namespace ? { namespace } : null);
         for (const dimension in metrics) {
-            ga(prefix + 'set', 'dimension'+dimension, metrics[dimension]);
+            ga(prefix + 'set', 'dimension' + dimension, metrics[dimension]);
         }
         ga(prefix + 'send', 'event', 'evolv', 'evolvRendered', { nonInteraction: true });
     } catch (e) {
@@ -12,7 +12,7 @@ function _evolvGA(id, metrics, namespace) {
 }
 
 function evolvGA(id, metrics, namespace) {
-    var interval = setInterval( function() {
+    var interval = setInterval(function() {
         if (window.ga) {
             _evolvGA(id, metrics, namespace);
             clearInterval(interval);
