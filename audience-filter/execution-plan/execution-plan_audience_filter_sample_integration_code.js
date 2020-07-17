@@ -1,7 +1,7 @@
 /****
- * Evolv 1.0 Audience Filter code for Experience Accelerator and Execution Plan.
+ * Evolv 1.0 Audience Filter code for Execution Plan.
  * Note: the sample code below should be placed AFTER 
- * the execution plan/experience accelerator snippet in the DOM.
+ * the execution plan snippet in the DOM.
  ****/
 
 /****
@@ -19,17 +19,4 @@ evolv.runtime.then(function(rt) {
     });
     // re-run evaluatePlans to apply filters to experiment
     rt.evaluatePlans();
-});
-
-/****
- * EXPERIENCE ACCELERATOR
- * Sample audience filter.
- * Note: (await evolv.runtime) is not compatible with IE 11
- ****/
-evolv.context.update({
-    // Namespace object will be included in event defintion in the Evolv Manager.
-    // Please inform Evolv if you plan to use a namespace object.
-    [namespaceObj]: {
-        [key]: "[value]"
-    }
 });
