@@ -1,100 +1,94 @@
 class EvolvGAClient {
     trackingId: string;
     namespace: string;
-    // experimentIdMetric: string;
-    candidatedIdMetric: string;
+    candidateIdMetric: string;
     userIdMetric: string;
     maxWaitTime: number;
+    queue: any[] = [];
 
     constructor(
         trackingId: string,
         namespace: string,
-        // experimentIdMetric: string,
-        candidatedIdMetric: string,
+        candidateIdMetric: string,
         userIdMetric: string,
         maxWaitTime = 5000
     ) {
         this.trackingId = trackingId;
         this.namespace = namespace;
-        // this.experimentIdMetric = experimentIdMetric;
-        this.candidatedIdMetric = candidatedIdMetric;
+        this.candidateIdMetric = candidateIdMetric;
         this.userIdMetric = userIdMetric;
         this.maxWaitTime = maxWaitTime;
 
-        // @ts-ignore
-        window['evolvPreload'] = window['evolvPreload'] || {};
-        // @ts-ignore
-        window['evolvPreload'] = merge(window['evolvPreload'], {
-            listeners: {
-                rendered: (event: any) => {
-                    addLogEntry('rendered', event);
-                    this.sendMetrics(event);
-                }
-            }
-        });
+        this.ensureListeners();
+        this.waitForGA();
+
+        const original = window.evolvPreload.listeners.rendered;
+        window.evolvPreload.listeners.rendered = (event: any) => {
+            this.sendMetrics(event);
+            original(event);
+        };
     }
 
-    getGA(): Promise<any> {
-        let ga: any;
-        return new Promise((resolve, reject) => {
-            let checkForGA = (startTime: number) => {
-                // @ts-ignore
-                ga = window['ga'];
+    ensureListeners() {
+        if (!window.evolvPreload) {
+            window.evolvPreload = {};
+        }
 
-                if (!ga) {
-                    if (new Date().getTime() - startTime > this.maxWaitTime) {
-                        reject('GA not found by Evolv');
-                        return;
-                    }
-                    setTimeout(() => {
-                        checkForGA(startTime);
-                    }, 50);
-
-                    return;
-                }  else {
-                    resolve(ga);
-                }
-            };
-
-            checkForGA(new Date().getTime());
-        });
-    }
-
-    private sendMetrics(event: any) {
-        // @ts-ignore
-        this.getGA().then((ga) => {
-            let namespace = this.namespace;
-            var prefix = namespace ? namespace + '.' : '';
-            ga('create', this.trackingId, 'auto', namespace ? {namespace} : null);
-            ga(prefix + 'set', 'dimension' + this.candidatedIdMetric, event.experimentId + '-' + event.candidateId);
-            ga(prefix + 'set', 'dimension' + this.userIdMetric, event.experimentId + '-' + event.candidateId);
-            ga(prefix + 'send', 'event', 'evolv', 'evolvRendered', { nonInteraction: true });
-        });
-    }
-}
-
-function merge(target: any, source: any) {
-    if (isObject(target) && isObject(source)) {
-        for (const key in source) {
-            if (isObject(source[key])) {
-                if (!target[key]) {
-                    Object.assign(target, { [key]: {} });
-                }
-                merge(target[key], source[key]);
-            } else {
-                Object.assign(target, { [key]: source[key] });
-            }
+        if (!window.evolvPreload.listeners) {
+            window.evolvPreload.listeners = {};
         }
     }
 
-    return target;
-}
+    getGa() {
+        return (window.GoogleAnalyticsObject && window[window.GoogleAnalyticsObject]) || window.ga;
+    }
 
-function isObject(value: any): value is { [key: string]: any } {
-    return (value && typeof value === 'object' && !Array.isArray(value));
-}
+    waitForGA() {
+        if (this.getGa()) {
+            return;
+        }
 
-function addLogEntry(type: string, message: any) {
-    message = (typeof message === 'string') ? message : JSON.stringify(message);
-    console.info(type, message);
+        const begin = Date.now();
+        const intervalId = setInterval(() => {
+            if ((Date.now() - begin) > this.maxWaitTime) {
+                clearInterval(intervalId);
+                console.log('Evolv: GA integration timed out.');
+                return;
+            }
+
+            const ga = this.getGa();
+            // @ts-ignore
+            if (!ga) {
+                return;
+            }
+
+            let args;
+            while(this.queue.length) {
+                args = this.queue.pop();
+                // @ts-ignore
+                ga(...args);
+            }
+
+            clearInterval(intervalId);
+        }, 50);
+    }
+
+    private emit(...args: any[]) {
+        const ga = this.getGa();
+        if (ga) {
+            // @ts-ignore
+            ga(...args);
+        } else {
+            this.queue.push(args);
+        }
+    }
+
+    private sendMetrics(event: any) {
+        const namespace = this.namespace;
+        const prefix = namespace ? namespace + '.' : '';
+        this.emit('create', this.trackingId, 'auto', namespace ? {namespace} : null);
+        this.emit(prefix + 'set', 'dimension' + this.candidateIdMetric, event.experimentId + '-' + event.candidateId);
+        this.emit(prefix + 'set', 'dimension' + this.userIdMetric, event.experimentId + '-' + event.candidateId);
+        this.emit(prefix + 'send', 'event', 'evolv', 'evolvRendered', { nonInteraction: true });
+    }
 }
