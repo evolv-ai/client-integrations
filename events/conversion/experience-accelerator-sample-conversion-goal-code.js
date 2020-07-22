@@ -6,12 +6,12 @@
  ****/
 var selector = document.querySelector("[selector]");
 selector.addEventListener("click", function() {
-    evolv.client.emit('[my-event]');
+    window.evolv.client.emit('[my-event]');
 })
 
 /****
  * Experience Accelerator trigger of conversion on page load event, e.g. order confirmation.
  ****/
 document.addEventListener("DOMContentLoaded", function() {
-    evolv.client.emit('[my-event]');
+    window.evolv.client.emit('[my-event]');
 });
