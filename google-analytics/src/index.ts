@@ -1,4 +1,4 @@
-export class EvolvGAClient {
+export class GAClient {
     trackingId: string;
     namespace: string;
     candidateIdMetric: string;
@@ -28,19 +28,19 @@ export class EvolvGAClient {
         const original = window.evolvPreload.listeners.rendered;
         window.evolvPreload.listeners.rendered = (event: any) => {
             this.sendMetrics('rendered', event);
-            original(event);
+            original && original(event);
         };
 
         const original2 = window.evolvPreload.listeners.notrendered;
         window.evolvPreload.listeners.notrendered = (event: any) => {
             this.sendMetrics('notrendered', event);
-            original2(event);
+            original2 && original2(event);
         };
 
         const original3 = window.evolvPreload.listeners.triggered;
         window.evolvPreload.listeners.triggered = (event: any) => {
             this.sendMetrics(event.data.type, event.data);
-            original3(event);
+            original3 &&  original3(event);
         };
     }
 

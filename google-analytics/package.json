@@ -4,7 +4,7 @@
   "description": "Evolv integration code for Google Analytics",
   "main": "src/index.ts",
   "scripts": {
-    "build": "tsc --project tsconfig.json",
+    "build": "rollup --config ./rollup.config.js",
     "test": "jest"
   },
   "author": "",
@@ -12,6 +12,9 @@
   "devDependencies": {
     "@types/jest": "^26.0.0",
     "jest": "^26.0.1",
+    "rollup-plugin-terser": "^6.1.0",
+    "rollup-plugin-typescript2": "^0.27.1",
+    "rollup": "^2.23.0",
     "ts-jest": "^26.1.0",
     "typescript": "^3.9.5"
   },
