@@ -25,6 +25,10 @@ export class GAClient {
         this.ensureListeners();
         this.waitForGA();
 
+        this.configureListeners();
+    }
+
+    private configureListeners() {
         const original = window.evolvPreload.listeners.rendered;
         window.evolvPreload.listeners.rendered = (event: any) => {
             this.sendMetrics('rendered', event);
@@ -40,7 +44,7 @@ export class GAClient {
         const original3 = window.evolvPreload.listeners.triggered;
         window.evolvPreload.listeners.triggered = (event: any) => {
             this.sendMetrics(event.data.type, event.data);
-            original3 &&  original3(event);
+            original3 && original3(event);
         };
     }
 
