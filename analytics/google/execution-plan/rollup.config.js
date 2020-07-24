@@ -9,7 +9,7 @@ export default {
         })
     ],
     output: [
-        { file: "dist/exec-ga.js", format: "iife", name: "Evolv" },
-        { file: "dist/exec-ga.min.js", format: "iife", name: "Evolv", plugins: [terser()] }
+        { file: "dist/evolv-exec-plan-ga.js", format: "iife", name: "Evolv" },
+        { file: "dist/evolv-exec-plan-ga.min.js", format: "iife", name: "Evolv", plugins: [terser()] }
     ]
 };

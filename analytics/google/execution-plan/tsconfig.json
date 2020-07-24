@@ -8,10 +8,10 @@
 
     "skipLibCheck": true,                     /* Skip type checking of declaration files. */
     "forceConsistentCasingInFileNames": true,  /* Disallow inconsistently-cased references to the same file. */
-    "outDir": "dist",
+    "outDir": "../../../google-analytics/dist",
     "sourceMap": true
   },"exclude": [
-    "node_modules",
+    "./node_modules",
     "**/test/*.test.ts"
 ]
 }
