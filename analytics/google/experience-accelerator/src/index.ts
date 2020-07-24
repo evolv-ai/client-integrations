@@ -27,20 +27,20 @@ export class GAClient {
     }
 
     private configureListeners() {
-        window.evolv.client.on('confirmed', (event: any) => {
-            this.getSendMetricsForActiveCandidates('confirmed');
+        window.evolv.client.on('confirmed', (type: string) => {
+            this.sendMetricsForActiveCandidates('confirmed');
         });
 
-        window.evolv.client.on('contaminated', (event: any) => {
-            this.getSendMetricsForActiveCandidates('contaminated');
+        window.evolv.client.on('contaminated', (type: string) => {
+            this.sendMetricsForActiveCandidates('contaminated');
         });
 
-        window.evolv.client.on('event.emitted', (event: any, type: string) => {
-            this.sendMetrics(type, { uid : window.evolv.context.uid });
+        window.evolv.client.on('event.emitted', (type: any, name: string) => {
+            this.sendMetrics(name, { uid : window.evolv.context.uid });
         });
     }
 
-    private getSendMetricsForActiveCandidates(type: string) {
+    sendMetricsForActiveCandidates(type: string) {
         var allocations = this.getEvolv().client.context.get('experiments').allocations;
 
         for (let i = 0; i < allocations.length; i++) {
