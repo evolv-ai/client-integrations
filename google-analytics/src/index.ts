@@ -1,4 +1,4 @@
-class EvolvGAClient {
+export class EvolvGAClient {
     trackingId: string;
     namespace: string;
     candidateIdMetric: string;
@@ -40,6 +40,7 @@ class EvolvGAClient {
     }
 
     getGa() {
+        // @ts-ignore
         return (window.GoogleAnalyticsObject && window[window.GoogleAnalyticsObject]) || window.ga;
     }
 
