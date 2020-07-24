@@ -2,6 +2,7 @@ export class EvolvGAClient {
     trackingId: string;
     namespace: string;
     candidateIdMetric: string;
+    experimentIdMetric: string;
     userIdMetric: string;
     maxWaitTime: number;
     queue: any[] = [];
@@ -10,12 +11,14 @@ export class EvolvGAClient {
         trackingId: string,
         namespace: string,
         candidateIdMetric: string,
+        experimentIdMetric: string,
         userIdMetric: string,
         maxWaitTime = 5000
     ) {
         this.trackingId = trackingId;
         this.namespace = namespace;
         this.candidateIdMetric = candidateIdMetric;
+        this.experimentIdMetric = experimentIdMetric;
         this.userIdMetric = userIdMetric;
         this.maxWaitTime = maxWaitTime;
 
@@ -24,8 +27,20 @@ export class EvolvGAClient {
 
         const original = window.evolvPreload.listeners.rendered;
         window.evolvPreload.listeners.rendered = (event: any) => {
-            this.sendMetrics(event);
+            this.sendMetrics('rendered', event);
             original(event);
+        };
+
+        const original2 = window.evolvPreload.listeners.notrendered;
+        window.evolvPreload.listeners.notrendered = (event: any) => {
+            this.sendMetrics('notrendered', event);
+            original2(event);
+        };
+
+        const original3 = window.evolvPreload.listeners.triggered;
+        window.evolvPreload.listeners.triggered = (event: any) => {
+            this.sendMetrics(event.data.type, event.data);
+            original3(event);
         };
     }
 
@@ -84,12 +99,17 @@ export class EvolvGAClient {
         }
     }
 
-    private sendMetrics(event: any) {
-        const namespace = this.namespace;
-        const prefix = namespace ? namespace + '.' : '';
-        this.emit('create', this.trackingId, 'auto', namespace ? {namespace} : null);
-        this.emit(prefix + 'set', 'dimension' + this.candidateIdMetric, event.experimentId + '-' + event.candidateId);
-        this.emit(prefix + 'set', 'dimension' + this.userIdMetric, event.experimentId + '-' + event.candidateId);
-        this.emit(prefix + 'send', 'event', 'evolv', 'evolvRendered', { nonInteraction: true });
+    private sendMetrics(type: string, event: any) {
+        window.evolv.scout.then((scout: any) => {
+            const namespace = this.namespace;
+            const prefix = namespace ? namespace + '.' : '';
+            this.emit('create', this.trackingId, 'auto', namespace ? {namespace} : null);
+
+            this.emit(prefix + 'set', 'dimension' + this.candidateIdMetric, event.candidateId);
+            this.emit(prefix + 'set', 'dimension' + this.experimentIdMetric, event.experimentId);
+            this.emit(prefix + 'set', 'dimension' + this.userIdMetric, scout.tracker.uid);
+
+            this.emit(prefix + 'send', 'event', 'evolv', 'evolv-' + type, { nonInteraction: true });
+        });
     }
 }
