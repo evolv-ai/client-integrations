@@ -72,7 +72,7 @@ export class GAClient {
         const intervalId = setInterval(() => {
             if ((Date.now() - begin) > this.maxWaitTime) {
                 clearInterval(intervalId);
-                console.log('Evolv: GA integration timed out.');
+                console.log('[Evolv] GA integration timed out.');
                 return;
             }
 
