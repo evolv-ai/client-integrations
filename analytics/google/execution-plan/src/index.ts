@@ -1,26 +1,14 @@
 export class GAClient {
-    trackingId: string;
-    namespace: string;
-    candidateIdMetric: string;
-    experimentIdMetric: string;
-    userIdMetric: string;
-    maxWaitTime: number;
     queue: any[] = [];
 
     constructor(
-        trackingId: string,
-        namespace: string,
-        candidateIdMetric: string,
-        experimentIdMetric: string,
-        userIdMetric: string,
-        maxWaitTime = 5000
+        public readonly trackingId: string,
+        public readonly namespace: string,
+        public readonly candidateIdMetric: string,
+        public readonly experimentIdMetric: string,
+        public readonly userIdMetric: string,
+        public readonly maxWaitTime = 5000
     ) {
-        this.trackingId = trackingId;
-        this.namespace = namespace;
-        this.candidateIdMetric = candidateIdMetric;
-        this.experimentIdMetric = experimentIdMetric;
-        this.userIdMetric = userIdMetric;
-        this.maxWaitTime = maxWaitTime;
 
         this.ensureListeners();
         this.waitForGA();
