@@ -84,7 +84,7 @@ export class GAClient {
 
             let args;
             while(this.queue.length) {
-                args = this.queue.pop();
+                args = this.queue.shift();
                 // @ts-ignore
                 ga(...args);
             }
