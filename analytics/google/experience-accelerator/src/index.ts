@@ -1,5 +1,6 @@
 export class GAClient {
     queue: any[] = [];
+    interval: number = 50;
 
     constructor(
         public readonly trackingId: string,
@@ -10,7 +11,7 @@ export class GAClient {
         public readonly maxWaitTime = 5000
     ) {
         this.waitForGA();
-        this.waitForEvolv(this.configureListeners);
+        this.waitForEvolv(this.configureListeners.bind(this));
     }
 
     private configureListeners() {
@@ -63,10 +64,10 @@ export class GAClient {
                 return;
             }
 
-            functionWhenReady.bind(this)();
+            functionWhenReady();
 
             clearInterval(intervalId);
-        }, 50);
+        }, this.interval);
     }
 
     waitForGA() {
@@ -94,7 +95,7 @@ export class GAClient {
             }
 
             clearInterval(intervalId);
-        }, 50);
+        }, this.interval);
     }
 
     private emit(...args: any[]) {

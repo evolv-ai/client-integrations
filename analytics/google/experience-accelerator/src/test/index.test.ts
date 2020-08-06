@@ -6,18 +6,6 @@ describe('GA integration', () => {
         delete window['ga'];
     });
 
-    describe('Ensure instantiation', () => {
-        test('Validate emitted events fire', () => {
-            var ga = jest.fn();
-            window['ga'] = ga;
-            window['evolv'] = {};
-
-            const client = new GAClient('trackingId', 'ns', 'candidateId', 'experimentId', 'userId');
-
-            expect(ga.mock.calls.length).toBe(0);
-        });
-    });
-
     describe('If GA already loaded', () => {
         test('Validate emitted events fire for a single experiment', () => {
             var ga = jest.fn();
@@ -122,7 +110,7 @@ describe('GA integration', () => {
                 expect(ga.mock.calls[3]).toEqual( ["ns.set", "dimensionuserId", "user1"]);
                 expect(ga.mock.calls[4]).toEqual( ["ns.send", "event", "evolv", "evolv-confirmed", { "nonInteraction": true }]);
                 done();
-            }, 100);
+            }, client.interval*2);
         });
 
         test('Validate emitted events fire for multiple experiments', done => {
@@ -166,7 +154,7 @@ describe('GA integration', () => {
                 expect(ga.mock.calls[8]).toEqual( ["ns.set", "dimensionuserId", "user1"]);
                 expect(ga.mock.calls[9]).toEqual( ["ns.send", "event", "evolv", "evolv-confirmed", { "nonInteraction": true }]);
                 done();
-            },100);
+            },client.interval*2);
         });
     });
 });
