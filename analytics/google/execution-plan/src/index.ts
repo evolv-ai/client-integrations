@@ -65,7 +65,6 @@ export class GAClient {
             }
 
             const ga = this.getGa();
-            // @ts-ignore
             if (!ga) {
                 return;
             }
@@ -73,7 +72,6 @@ export class GAClient {
             let args;
             while(this.queue.length) {
                 args = this.queue.shift();
-                // @ts-ignore
                 ga(...args);
             }
 
@@ -84,7 +82,6 @@ export class GAClient {
     private emit(...args: any[]) {
         const ga = this.getGa();
         if (ga) {
-            // @ts-ignore
             ga(...args);
         } else {
             this.queue.push(args);
