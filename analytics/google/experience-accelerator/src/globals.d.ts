@@ -2,7 +2,7 @@ export {};
 
 declare global {
     interface Window {
-        ga: Function;
+        ga: (...args: unknown[]) => void;
         evolv: any;
         evolvPreload: any;
         GoogleAnalyticsObject?: string;

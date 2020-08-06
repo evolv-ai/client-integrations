@@ -2,7 +2,7 @@
   "name": "evolv-exp-acc-ga-integration",
   "version": "1.0.0",
   "description": "Evolv Execution Plan integration code for Google Analytics",
-  "main": "src/index.ts",
+  "main": "dist/evolv-exp-acc-ga.js",
   "scripts": {
     "build": "rollup --config ./rollup.config.js",
     "test": "jest"

@@ -7,7 +7,7 @@ npm run build
 ```
 
 This will output:
-dist/evolv-exec-plan-ga.js and dist.evolv-exec-plan-ga.min.js
+dist/evolv-exp-acc-ga.js and dist/evolv-exp-acc-ga.min.js
 
 These can be added directly to the page and used to configure the integration
 

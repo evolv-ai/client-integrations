@@ -1,27 +1,14 @@
 export class GAClient {
-    trackingId: string;
-    namespace: string;
-    candidateIdMetric: string;
-    experimentIdMetric: string;
-    userIdMetric: string;
-    maxWaitTime: number;
     queue: any[] = [];
 
     constructor(
-        trackingId: string,
-        namespace: string,
-        candidateIdMetric: string,
-        experimentIdMetric: string,
-        userIdMetric: string,
-        maxWaitTime = 5000
+        public readonly trackingId: string,
+        public readonly namespace: string,
+        public readonly candidateIdMetric: string,
+        public readonly experimentIdMetric: string,
+        public readonly userIdMetric: string,
+        public readonly maxWaitTime = 5000
     ) {
-        this.trackingId = trackingId;
-        this.namespace = namespace;
-        this.candidateIdMetric = candidateIdMetric;
-        this.experimentIdMetric = experimentIdMetric;
-        this.userIdMetric = userIdMetric;
-        this.maxWaitTime = maxWaitTime;
-
         this.waitForGA();
         this.waitForEvolv(this.configureListeners);
     }
@@ -72,7 +59,6 @@ export class GAClient {
             }
 
             const evolv = this.getEvolv();
-            // @ts-ignore
             if (!evolv) {
                 return;
             }
@@ -97,15 +83,13 @@ export class GAClient {
             }
 
             const ga = this.getGa();
-            // @ts-ignore
             if (!ga) {
                 return;
             }
 
             let args;
             while(this.queue.length) {
-                args = this.queue.pop();
-                // @ts-ignore
+                args = this.queue.shift();
                 ga(...args);
             }
 
@@ -116,7 +100,6 @@ export class GAClient {
     private emit(...args: any[]) {
         const ga = this.getGa();
         if (ga) {
-            // @ts-ignore
             ga(...args);
         } else {
             this.queue.push(args);
