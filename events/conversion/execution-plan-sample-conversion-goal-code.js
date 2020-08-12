@@ -11,7 +11,7 @@ function evolvConversion() {
 };
 
 /****
- * Execution Plan click event. 
+ * Execution Plan click event.
  * Reference the appropriate selector.
  ****/
 var selector = document.querySelector("#cta");
@@ -25,3 +25,19 @@ selector.addEventListener("click", function() {
 document.addEventListener("DOMContentLoaded", function() {
     evolvConversion();
 });
+
+/****
+ * Ensure event fires if page loads before evolv client is available
+ ****/
+(function evolvConversion() {
+    document.addEventListener("DOMContentLoaded", function() {
+        if (evolv !== 'undefined') {
+            evolv.runtime.then(function(rt) {
+               rt.emitEvent('[event-name]'); // event name is set in the Manager
+            });
+            return;
+        } else {
+            evolvConversion();
+        }
+    });
+})();
