@@ -7,7 +7,7 @@ export class GtagClient extends Client {
         public readonly userIdDimension: string,
         public readonly maxWaitTime = 5000
     ) {
-        super('', maxWaitTime);
+        super(maxWaitTime);
     }
 
     getAnalytics() {

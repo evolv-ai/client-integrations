@@ -11,11 +11,11 @@ export abstract class Client {
 
     private configureListeners() {
         window.evolv.client.on('confirmed', (type: string) => {
-            this.sendMetricsForActiveCandidates(type);
+            this.sendMetricsForActiveCandidates('confirmed');
         });
 
         window.evolv.client.on('contaminated', (type: string) => {
-            this.sendMetricsForActiveCandidates(type);
+            this.sendMetricsForActiveCandidates('contaminated');
         });
 
         window.evolv.client.on('event.emitted', (type: any, name: string) => {
@@ -24,33 +24,11 @@ export abstract class Client {
     }
 
     sendMetricsForActiveCandidates(type: string) {
-        let contextKey = this.getContextKey(type);
-        let candidates = this.getEvolv().context.get(contextKey) || [];
-        for (let i = 0; i < candidates.length; i++) {
-            const allocation = this.lookupFromAllocations(candidates[i].cid);
-            this.sendMetrics(type, allocation);
-        }
-    }
+        var allocations = this.getEvolv().client.context.get('experiments').allocations;
 
-    private lookupFromAllocations(cid: string) {
-        let allocations = this.getEvolv().context.get('experiments').allocations;
         for (let i = 0; i < allocations.length; i++) {
             const allocation = allocations[i];
-
-            if (allocation.cid === cid) {
-                return allocation;
-            }
-        }
-    }
-
-    private getContextKey(type: string) {
-        switch (type) {
-            case 'confirmed':
-                return 'confirmations';
-            case 'contaminated':
-                return 'contaminations';
-            default:
-                return '';
+            this.sendMetrics(type, allocation);
         }
     }
 
@@ -62,7 +40,6 @@ export abstract class Client {
 
     waitForEvolv(functionWhenReady: Function) {
         if (this.getEvolv()) {
-            functionWhenReady && functionWhenReady();
             return;
         }
 
@@ -79,7 +56,7 @@ export abstract class Client {
                 return;
             }
 
-            functionWhenReady && functionWhenReady();
+            functionWhenReady();
 
             clearInterval(intervalId);
         }, this.interval);

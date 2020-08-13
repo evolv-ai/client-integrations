@@ -1,8 +1,8 @@
 {
-  "name": "@evolv/exec-plan-ga-integration",
+  "name": "evolv-exp-acc-aa-integration",
   "version": "1.0.0",
-  "description": "Evolv Experience Accelerator integration code for Google Analytics",
-  "main": "dist/index.js",
+  "description": "Evolv Experience Accelerator integration code for Adobe Analytics",
+  "main": "dist/evolv-exp-acc-aa.js",
   "scripts": {
     "build": "rollup --config ./rollup.config.js",
     "test": "jest"
