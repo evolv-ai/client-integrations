@@ -10,6 +10,11 @@ export default {
     ],
     output: [
         { file: "dist/evolv-exp-acc-ga.js", format: "iife", name: "Evolv" },
-        { file: "dist/evolv-exp-acc-ga.min.js", format: "iife", name: "Evolv", plugins: [terser()] }
+        { file: "dist/evolv-exp-acc-ga.min.js", format: "iife", name: "Evolv", plugins: [terser({
+                    output: {
+                        comments: false,
+                    }
+        }
+        )]}
     ]
 };

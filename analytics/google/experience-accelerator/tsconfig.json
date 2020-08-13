@@ -8,7 +8,7 @@
 
     "skipLibCheck": true,                     /* Skip type checking of declaration files. */
     "forceConsistentCasingInFileNames": true,  /* Disallow inconsistently-cased references to the same file. */
-    "outDir": "../../../google-analytics/dist",
+    "outDir": "../dist",
     "sourceMap": true
   },"exclude": [
     "./node_modules",

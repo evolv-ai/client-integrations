@@ -4,9 +4,8 @@ export class GAClient {
     constructor(
         public readonly trackingId: string,
         public readonly namespace: string,
-        public readonly candidateIdMetric: string,
-        public readonly experimentIdMetric: string,
-        public readonly userIdMetric: string,
+        public readonly userIdDimension: string,
+        public readonly experimentIdDimension?: string,
         public readonly maxWaitTime = 5000
     ) {
 
@@ -94,11 +93,13 @@ export class GAClient {
             const prefix = namespace ? namespace + '.' : '';
             this.emit('create', this.trackingId, 'auto', namespace ? {namespace} : null);
 
-            this.emit(prefix + 'set', 'dimension' + this.candidateIdMetric, event.candidateId);
-            this.emit(prefix + 'set', 'dimension' + this.experimentIdMetric, event.experimentId);
-            this.emit(prefix + 'set', 'dimension' + this.userIdMetric, scout.tracker.uid);
+            if (this.experimentIdDimension) {
+                this.emit(prefix + 'set', 'dimension' + this.experimentIdDimension, event.experimentId);
+            }
 
-            this.emit(prefix + 'send', 'event', 'evolv', 'evolv-' + type, { nonInteraction: true });
+            this.emit(prefix + 'set', 'dimension' + this.userIdDimension, scout.tracker.uid);
+
+            this.emit(prefix + 'send', 'event', 'evolv', 'evolv-' + type + (event.candidateId ? '-' + event.candidateId : ''), { nonInteraction: true });
         });
     }
 }
