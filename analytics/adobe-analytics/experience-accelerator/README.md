@@ -12,7 +12,7 @@ dist/evolv-exp-acc-aa.js and dist/evolv-exp-acc-aa.min.js
 These can be added directly to the page and used to configure the integration
 
 ```
-// Copy the file contents TODO I AM WRONG
+// Copy the file contents
 var Evolv=function(e){"use strict";var t=function(){function e(e,t,n,i,r,o){var d=th...
 
 // Configure the integration 
