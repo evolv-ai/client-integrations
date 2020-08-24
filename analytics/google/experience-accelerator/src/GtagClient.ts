@@ -3,8 +3,9 @@ import {Client} from "./Client";
 export class GtagClient extends Client {
     constructor(
         public readonly trackingId: string,
+        public readonly sessionIdDimension: string,
+        public readonly candidateIdDimension: string,
         public readonly userIdDimension: string,
-        public readonly experimentIdDimension?: string,
         public readonly maxWaitTime = 5000
     ) {
         super(trackingId, maxWaitTime);
@@ -19,11 +20,29 @@ export class GtagClient extends Client {
             'non_interaction': true
         };
 
-        if (this.experimentIdDimension) {
-            dataMap['dimension' + this.experimentIdDimension] = event.eid;
-        }
-        dataMap['dimension' + this.userIdDimension] = event.uid;
+        var augmentedSid = '';
+        var augmentedCidEid = '';
+        var augmentedUid = '';
 
-        this.emit('event', 'evolv-' + type + (event.cid ? '-' + event.cid : ''), dataMap);
+        if (window.evolv.context.sid) {
+            augmentedSid = 'sid-' + window.evolv.context.sid;
+        }
+
+        if (event.uid) {
+            augmentedUid = "uid-" + event.uid;
+        }
+
+        if (event.cid) {
+            var cidEid = event.cid.split(':');
+            augmentedCidEid = 'cid-' + cidEid[0] + ':eid-' + cidEid[1];
+            dataMap['dimension' + this.candidateIdDimension] = augmentedCidEid;
+        }
+
+        dataMap['dimension' + this.userIdDimension] = augmentedUid;
+        dataMap['dimension' + this.sessionIdDimension] = augmentedSid;
+        dataMap['event_category'] = 'evolvids';
+        dataMap['event_label'] = type + ':' + augmentedUid + ':' + augmentedSid;
+
+        this.emit('event', augmentedCidEid, dataMap);
     }
 }

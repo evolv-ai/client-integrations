@@ -16,8 +16,9 @@ These can be added directly to the page and used to configure the integration
 var Evolv=function(e){"use strict";var t=function(){function e(e,t,n,i,r,o){var d=th...
 
 // Configure the integration 
-// with the parameters GAClient(TRACKING_ID, NAMESPACE, USER_ID_METRIC, EXPERIMENT_ID_METRIC (optional))
-const client = new Evolv.GAClient("UA-164633832-3", "", "1", "2");
+// with the parameters GAClient(TRACKING_ID, NAMESPACE, SESSION_ID_DIMENSION, CANDIDATE_ID_DIMENSION, USER_ID_SESSION)
+
+const client = new Evolv.GAClient("UA-164633832-3", "", "1", "2", "3");
 OR
-const client = new Evolv.GtagClient("UA-164633832-3", "1", "2");
+const client = new Evolv.GtagClient("UA-164633832-3", "1", "2", "3");
 ```
