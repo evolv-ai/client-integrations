@@ -4,8 +4,9 @@ export class GAClient extends Client {
     constructor(
         public readonly trackingId: string,
         public readonly namespace: string,
+        public readonly sessionIdDimension: string,
+        public readonly candidateIdDimension: string,
         public readonly userIdDimension: string,
-        public readonly experimentIdDimension?: string,
         public readonly maxWaitTime = 5000
     ) {
         super(trackingId, maxWaitTime);
@@ -19,14 +20,34 @@ export class GAClient extends Client {
     sendMetrics(type: string, event: any) {
         const namespace = this.namespace;
         const prefix = namespace ? namespace + '.' : '';
-        this.emit('create', this.trackingId, 'auto', namespace ? {namespace} : null);
+        var augmentedSid = '';
+        var augmentedCidEid = '';
+        var augmentedUid = '';
 
-        if (this.experimentIdDimension) {
-            this.emit(prefix + 'set', 'dimension' + this.experimentIdDimension, event.eid);
+        if (window.evolv.context.sid) {
+            augmentedSid = 'sid-' + window.evolv.context.sid;
         }
 
-        this.emit(prefix + 'set', 'dimension' + this.userIdDimension, event.uid);
+        if (event.uid) {
+            augmentedUid = "uid-" + event.uid;
+        }
 
-        this.emit(prefix + 'send', 'event', 'evolv', 'evolv-' + type + (event.cid ? '-' + event.cid : ''), { nonInteraction: true });
+        this.emit('create', this.trackingId, 'auto', namespace ? {namespace} : null);
+
+        if (event.cid) {
+            var cidEid = event.cid.split(':');
+            augmentedCidEid = 'cid-' + cidEid[0] + ':eid-' + cidEid[1];
+            this.emit(prefix + 'set', 'dimension' + this.candidateIdDimension, augmentedCidEid);
+        }
+
+        this.emit(prefix + 'set', 'dimension' + this.userIdDimension, augmentedUid);
+        this.emit(prefix + 'set', 'dimension' + this.sessionIdDimension, augmentedSid);
+
+        this.emit(prefix + 'send', 'event', { 
+            'eventCategory': 'evolvids',
+            'eventAction': augmentedCidEid,
+            'eventLabel': type + ':' + augmentedUid + ':' + augmentedSid,
+            'nonInteraction': true
+        });
     }
 }
