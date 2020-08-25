@@ -17,7 +17,7 @@ describe('GA integration', () => {
             };
             window['gtag'] = gtag;
 
-            const client = new GtagClient('trackingId','sessionId', 'candidateId', 'userId');
+            const client = new GtagClient('sessionId', 'candidateId', 'userId');
             expect(on.mock.calls.length).toBe(3);
             expect(on.mock.calls[0][0]).toBe("confirmed");
             expect(on.mock.calls[1][0]).toBe("contaminated");
@@ -29,7 +29,7 @@ describe('GA integration', () => {
             var on = jest.fn();
             window['gtag'] = gtag;
 
-            const client = new GtagClient('trackingId','sessionId', 'candidateId', 'userId');
+            const client = new GtagClient('sessionId', 'candidateId', 'userId');
 
             window['evolv'] = {
                 client: {
@@ -79,7 +79,7 @@ describe('GA integration', () => {
                 }
             };
 
-            const client = new GtagClient('trackingId','sessionId', 'candidateId', 'userId');
+            const client = new GtagClient('sessionId', 'candidateId', 'userId');
             client.sendMetricsForActiveCandidates('confirmed');
 
             window['gtag'] = gtag;
@@ -131,7 +131,7 @@ describe('GA integration', () => {
                 }
             };
 
-            const client = new GtagClient('trackingId','sessionId', 'candidateId', 'userId');
+            const client = new GtagClient('sessionId', 'candidateId', 'userId');
             client.sendMetricsForActiveCandidates('contaminated');
 
             window['gtag'] = gtag;
@@ -192,7 +192,7 @@ describe('GA integration', () => {
                 }
             };
 
-            const client = new GtagClient('trackingId','sessionId', 'candidateId', 'userId');
+            const client = new GtagClient('sessionId', 'candidateId', 'userId');
             client.sendMetrics('custom-event', {
                 uid: 'user1'
             });
