@@ -2,13 +2,12 @@ import {Client} from "./Client";
 
 export class GtagClient extends Client {
     constructor(
-        public readonly trackingId: string,
         public readonly sessionIdDimension: string,
         public readonly candidateIdDimension: string,
         public readonly userIdDimension: string,
         public readonly maxWaitTime = 5000
     ) {
-        super(trackingId, maxWaitTime);
+        super('', maxWaitTime);
     }
 
     getAnalytics() {
