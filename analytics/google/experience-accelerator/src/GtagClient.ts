@@ -32,8 +32,14 @@ export class GtagClient extends Client {
         }
 
         if (event.cid) {
-            var cidEid = event.cid.split(':');
+            let cidEid = event.cid.split(':');
             augmentedCidEid = 'cid-' + cidEid[0] + ':eid-' + cidEid[1];
+
+            let remaining = cidEid.slice(2).join(':');
+            if (remaining) {
+                augmentedCidEid = augmentedCidEid + ':' + remaining;
+            }
+
             dataMap['dimension' + this.candidateIdDimension] = augmentedCidEid;
         }
 

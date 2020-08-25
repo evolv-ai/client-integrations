@@ -59,7 +59,7 @@ describe('GA integration', () => {
                             return {
                                 allocations: [{
                                     uid: 'user1',
-                                    cid: 'cid1:eid1',
+                                    cid: 'cid1:eid1:extra',
                                     eid: 'eid1'
                                 }, {
                                     uid: 'user1',
@@ -69,7 +69,7 @@ describe('GA integration', () => {
                             }
                         } else if (key === 'confirmations') {
                             return [{
-                                cid: 'cid1:eid1'
+                                cid: 'cid1:eid1:extra'
                             }]
                         }
                     }
@@ -86,8 +86,8 @@ describe('GA integration', () => {
 
             setTimeout(() => {
                 expect(gtag.mock.calls.length).toBe(1);
-                expect(gtag.mock.calls[0]).toEqual( ["event", "cid-cid1:eid-eid1", {
-                    "dimensioncandidateId": "cid-cid1:eid-eid1",
+                expect(gtag.mock.calls[0]).toEqual( ["event", "cid-cid1:eid-eid1:extra", {
+                    "dimensioncandidateId": "cid-cid1:eid-eid1:extra",
                     "dimensionsessionId": "sid-sid1",
                     "dimensionuserId": "uid-user1",
                     "event_category": "evolvids",

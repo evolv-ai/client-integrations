@@ -37,8 +37,15 @@ export class GAClient extends Client {
         if (event.cid) {
             var cidEid = event.cid.split(':');
             augmentedCidEid = 'cid-' + cidEid[0] + ':eid-' + cidEid[1];
-            this.emit(prefix + 'set', 'dimension' + this.candidateIdDimension, augmentedCidEid);
+
+            let remaining = cidEid.slice(2).join(':');
+            if (remaining) {
+                augmentedCidEid = augmentedCidEid + ':' + remaining;
+            }
+        } else {
+            augmentedCidEid = '';
         }
+        this.emit(prefix + 'set', 'dimension' + this.candidateIdDimension, augmentedCidEid);
 
         this.emit(prefix + 'set', 'dimension' + this.userIdDimension, augmentedUid);
         this.emit(prefix + 'set', 'dimension' + this.sessionIdDimension, augmentedSid);
