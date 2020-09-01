@@ -9,7 +9,7 @@ export class GAClient extends Client {
         public readonly userIdDimension: string,
         public readonly maxWaitTime = 5000
     ) {
-        super(trackingId, maxWaitTime);
+        super(maxWaitTime);
     }
 
     getAnalytics() {
