@@ -27,5 +27,4 @@ with the parameters AAClient(
         maxWaitTime,
         customEventHandler /* use this to handle emit events to Adobe yourself -- otherwise we use s.tl() */ )
 const client = AAClient('1', '2', '3', { 'confirmed': 'event1', 'contaminated': 'event2', 'checkout': 'event3' });                     
-const client = new Evolv.AAClient("UA-164633832-3", "1", "2");
 ```
