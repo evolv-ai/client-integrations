@@ -11,11 +11,11 @@ export abstract class Client {
 
     private configureListeners() {
         window.evolv.client.on('confirmed', (type: string) => {
-            this.sendMetricsForActiveCandidates('confirmed');
+            this.sendMetricsForActiveCandidates(type);
         });
 
         window.evolv.client.on('contaminated', (type: string) => {
-            this.sendMetricsForActiveCandidates('contaminated');
+            this.sendMetricsForActiveCandidates(type);
         });
 
         window.evolv.client.on('event.emitted', (type: any, name: string) => {
@@ -24,11 +24,33 @@ export abstract class Client {
     }
 
     sendMetricsForActiveCandidates(type: string) {
-        var allocations = this.getEvolv().client.context.get('experiments').allocations;
+        let contextKey = this.getContextKey(type);
+        let candidates = this.getEvolv().context.get(contextKey) || [];
+        for (let i = 0; i < candidates.length; i++) {
+            const allocation = this.lookupFromAllocations(candidates[i].cid);
+            this.sendMetrics(type, allocation);
+        }
+    }
 
+    private lookupFromAllocations(cid: string) {
+        let allocations = this.getEvolv().context.get('experiments').allocations;
         for (let i = 0; i < allocations.length; i++) {
             const allocation = allocations[i];
-            this.sendMetrics(type, allocation);
+
+            if (allocation.cid === cid) {
+                return allocation;
+            }
+        }
+    }
+
+    private getContextKey(type: string) {
+        switch (type) {
+            case 'confirmed':
+                return 'confirmations';
+            case 'contaminated':
+                return 'contaminations';
+            default:
+                return '';
         }
     }
 
@@ -38,8 +60,14 @@ export abstract class Client {
 
     abstract getAnalytics(): any;
 
+    // Override for customer analytics processor
+    getHandler(): any {
+        return this.getAnalytics();
+    }
+
     waitForEvolv(functionWhenReady: Function) {
         if (this.getEvolv()) {
+            functionWhenReady && functionWhenReady();
             return;
         }
 
@@ -56,7 +84,7 @@ export abstract class Client {
                 return;
             }
 
-            functionWhenReady();
+            functionWhenReady && functionWhenReady();
 
             clearInterval(intervalId);
         }, this.interval);
@@ -75,7 +103,7 @@ export abstract class Client {
                 return;
             }
 
-            const analytics = this.getAnalytics();
+            const analytics = this.getHandler();
             if (!analytics) {
                 return;
             }
@@ -88,6 +116,40 @@ export abstract class Client {
 
             clearInterval(intervalId);
         }, this.interval);
+    }
+
+    getAugmentedCidEid(event: any) {
+        let augmentedCidEid;
+        if (event.cid) {
+            var cidEid = event.cid.split(':');
+            augmentedCidEid = 'cid-' + cidEid[0] + ':eid-' + cidEid[1];
+
+            let remaining = cidEid.slice(2).join(':');
+            if (remaining) {
+                augmentedCidEid = augmentedCidEid + ':' + remaining;
+            }
+        } else {
+            augmentedCidEid = '';
+        }
+
+        return augmentedCidEid;
+    }
+
+    getAugmentedUid(event: any) {
+        let augmentedUid = '';
+        if (event.uid) {
+            augmentedUid = "uid-" + event.uid;
+        }
+        return augmentedUid;
+    }
+
+    getAugmentedSid() {
+        let augmentedSid = '';
+        if (window.evolv.context.sid) {
+            augmentedSid = 'sid-' + window.evolv.context.sid;
+        }
+
+        return augmentedSid;
     }
 
     protected emit(...args: any[]) {

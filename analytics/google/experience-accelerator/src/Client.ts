@@ -60,6 +60,11 @@ export abstract class Client {
 
     abstract getAnalytics(): any;
 
+    // Override for customer analytics processor
+    getHandler(): any {
+        return this.getAnalytics();
+    }
+
     waitForEvolv(functionWhenReady: Function) {
         if (this.getEvolv()) {
             functionWhenReady && functionWhenReady();
@@ -98,7 +103,7 @@ export abstract class Client {
                 return;
             }
 
-            const analytics = this.getAnalytics();
+            const analytics = this.getHandler();
             if (!analytics) {
                 return;
             }
@@ -111,6 +116,40 @@ export abstract class Client {
 
             clearInterval(intervalId);
         }, this.interval);
+    }
+
+    getAugmentedCidEid(event: any) {
+        let augmentedCidEid;
+        if (event.cid) {
+            var cidEid = event.cid.split(':');
+            augmentedCidEid = 'cid-' + cidEid[0] + ':eid-' + cidEid[1];
+
+            let remaining = cidEid.slice(2).join(':');
+            if (remaining) {
+                augmentedCidEid = augmentedCidEid + ':' + remaining;
+            }
+        } else {
+            augmentedCidEid = '';
+        }
+
+        return augmentedCidEid;
+    }
+
+    getAugmentedUid(event: any) {
+        let augmentedUid = '';
+        if (event.uid) {
+            augmentedUid = "uid-" + event.uid;
+        }
+        return augmentedUid;
+    }
+
+    getAugmentedSid() {
+        let augmentedSid = '';
+        if (window.evolv.context.sid) {
+            augmentedSid = 'sid-' + window.evolv.context.sid;
+        }
+
+        return augmentedSid;
     }
 
     protected emit(...args: any[]) {
