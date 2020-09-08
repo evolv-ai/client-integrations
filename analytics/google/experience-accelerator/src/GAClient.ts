@@ -20,33 +20,12 @@ export class GAClient extends Client {
     sendMetrics(type: string, event: any) {
         const namespace = this.namespace;
         const prefix = namespace ? namespace + '.' : '';
-        var augmentedSid = '';
-        var augmentedCidEid = '';
-        var augmentedUid = '';
-
-        if (window.evolv.context.sid) {
-            augmentedSid = 'sid-' + window.evolv.context.sid;
-        }
-
-        if (event.uid) {
-            augmentedUid = "uid-" + event.uid;
-        }
+        var augmentedSid = this.getAugmentedSid();
+        var augmentedUid = this.getAugmentedUid(event);
+        let augmentedCidEid = this.getAugmentedCidEid(event);
 
         this.emit('create', this.trackingId, 'auto', namespace ? {namespace} : null);
-
-        if (event.cid) {
-            var cidEid = event.cid.split(':');
-            augmentedCidEid = 'cid-' + cidEid[0] + ':eid-' + cidEid[1];
-
-            let remaining = cidEid.slice(2).join(':');
-            if (remaining) {
-                augmentedCidEid = augmentedCidEid + ':' + remaining;
-            }
-        } else {
-            augmentedCidEid = '';
-        }
         this.emit(prefix + 'set', 'dimension' + this.candidateIdDimension, augmentedCidEid);
-
         this.emit(prefix + 'set', 'dimension' + this.userIdDimension, augmentedUid);
         this.emit(prefix + 'set', 'dimension' + this.sessionIdDimension, augmentedSid);
 

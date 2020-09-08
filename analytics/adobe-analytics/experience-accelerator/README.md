@@ -1,4 +1,4 @@
-# Google Analytics Experience Accelerator Integration
+# Adobe Analytics Experience Accelerator Integration
 
 ## To Build
 ```
@@ -16,6 +16,15 @@ These can be added directly to the page and used to configure the integration
 var Evolv=function(e){"use strict";var t=function(){function e(e,t,n,i,r,o){var d=th...
 
 // Configure the integration 
-// with the parameters AAClient(TRACKING_ID, NAMESPACE, CANDIDATE_ID_METRIC, EXPERIMENT_ID_METRIC, USER_ID_METRIC)
-const client = new Evolv.AAClient("UA-164633832-3", "1", "2");
+with the parameters AAClient( 
+        sessionIdDimension: string,
+        userIdDimension
+        candidateIdDimension,
+        eventsConfig /* { evolv-event-name: 'adobe-event-name'} - 'confirmed' (required), 'contaminated', other custom events fired to evolv
+        sessionIdDimensionType /* default 'eVar' - values 'eVar' or 'prop'*/,
+        userIdDimensionType /* default 'eVar' - values 'eVar' or 'prop'*/,
+        candidateIdDimensionType /* default 'eVar' - values 'eVar' or 'prop'*/,
+        maxWaitTime,
+        customEventHandler /* use this to handle emit events to Adobe yourself -- otherwise we use s.tl() */ )
+const client = AAClient('1', '2', '3', { 'confirmed': 'event1', 'contaminated': 'event2', 'checkout': 'event3' });                     
 ```
