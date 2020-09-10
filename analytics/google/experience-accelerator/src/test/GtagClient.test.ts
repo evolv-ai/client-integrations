@@ -17,7 +17,7 @@ describe('GA integration', () => {
             };
             window['gtag'] = gtag;
 
-            const client = new GtagClient('sessionId', 'candidateId', 'userId');
+            const client = new GtagClient();
             expect(on.mock.calls.length).toBe(3);
             expect(on.mock.calls[0][0]).toBe("confirmed");
             expect(on.mock.calls[1][0]).toBe("contaminated");
@@ -29,7 +29,7 @@ describe('GA integration', () => {
             var on = jest.fn();
             window['gtag'] = gtag;
 
-            const client = new GtagClient('sessionId', 'candidateId', 'userId');
+            const client = new GtagClient();
 
             window['evolv'] = {
                 client: {
@@ -79,17 +79,14 @@ describe('GA integration', () => {
                 }
             };
 
-            const client = new GtagClient('sessionId', 'candidateId', 'userId');
+            const client = new GtagClient();
             client.sendMetricsForActiveCandidates('confirmed');
 
             window['gtag'] = gtag;
 
             setTimeout(() => {
                 expect(gtag.mock.calls.length).toBe(1);
-                expect(gtag.mock.calls[0]).toEqual( ["event", "cid-cid1:eid-eid1:extra", {
-                    "dimensioncandidateId": "cid-cid1:eid-eid1:extra",
-                    "dimensionsessionId": "sid-sid1",
-                    "dimensionuserId": "uid-user1",
+                expect(gtag.mock.calls[0]).toEqual( ["event", "evolv-event:cid-cid1:eid-eid1:extra", {
                     "event_category": "evolvids",
                     "event_label": "confirmed:uid-user1:sid-sid1",
                     "non_interaction": true
@@ -131,25 +128,19 @@ describe('GA integration', () => {
                 }
             };
 
-            const client = new GtagClient('sessionId', 'candidateId', 'userId');
+            const client = new GtagClient();
             client.sendMetricsForActiveCandidates('contaminated');
 
             window['gtag'] = gtag;
 
             setTimeout(() => {
                 expect(gtag.mock.calls.length).toBe(2);
-                expect(gtag.mock.calls[0]).toEqual( ["event", "cid-cid1:eid-eid1", {
-                    "dimensioncandidateId": "cid-cid1:eid-eid1",
-                    "dimensionsessionId": "sid-sid1",
-                    "dimensionuserId": "uid-user1",
+                expect(gtag.mock.calls[0]).toEqual( ["event", "evolv-event:cid-cid1:eid-eid1", {
                     "event_category": "evolvids",
                     "event_label": "contaminated:uid-user1:sid-sid1",
                     "non_interaction": true
                 }]);
-                expect(gtag.mock.calls[1]).toEqual( ["event", "cid-cid2:eid-eid2", {
-                    "dimensioncandidateId": "cid-cid2:eid-eid2",
-                    "dimensionsessionId": "sid-sid1",
-                    "dimensionuserId": "uid-user1",
+                expect(gtag.mock.calls[1]).toEqual( ["event", "evolv-event:cid-cid2:eid-eid2", {
                     "event_category": "evolvids",
                     "event_label": "contaminated:uid-user1:sid-sid1",
                     "non_interaction": true
@@ -192,7 +183,7 @@ describe('GA integration', () => {
                 }
             };
 
-            const client = new GtagClient('sessionId', 'candidateId', 'userId');
+            const client = new GtagClient();
             client.sendMetrics('custom-event', {
                 uid: 'user1'
             });
@@ -201,9 +192,7 @@ describe('GA integration', () => {
 
             setTimeout(() => {
                 expect(gtag.mock.calls.length).toBe(1);
-                expect(gtag.mock.calls[0]).toEqual( ["event", "", {
-                    "dimensionsessionId": "sid-sid1",
-                    "dimensionuserId": "uid-user1",
+                expect(gtag.mock.calls[0]).toEqual( ["event", "evolv-event", {
                     "event_category": "evolvids",
                     "event_label": "custom-event:uid-user1:sid-sid1",
                     "non_interaction": true
