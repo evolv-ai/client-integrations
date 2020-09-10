@@ -168,7 +168,7 @@ describe('AA integration', () => {
                     "propsessionId": "sid-sid1",
                     "propuserId": "uid-user1",
                     "propcandidateId": "cid-cid1:eid-eid1",
-                    "linkTrackVars": "propuserId,propsessionId,propcandidateId,events"
+                    "linkTrackVars": "propuserId,propsessionId,propcandidateId"
                 }]);
                 done();
             }, client.interval * 2);
@@ -218,7 +218,7 @@ describe('AA integration', () => {
                     "eVarsessionId": "sid-sid1",
                     "eVaruserId": "uid-user1",
                     "eVarcandidateId": "cid-cid1:eid-eid1:extra",
-                    "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId,events"
+                    "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId"
                 }]);
                 done();
             }, client.interval*2);
@@ -268,13 +268,13 @@ describe('AA integration', () => {
                     "eVarsessionId": "sid-sid1",
                     "eVaruserId": "uid-user1",
                     "eVarcandidateId": "cid-cid1:eid-eid1",
-                    "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId,events"
+                    "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId"
                 }]);
                 expect(tl.mock.calls[1]).toEqual( [client, "o", "evolvids:contaminated", {
                     "eVarsessionId": "sid-sid1",
                     "eVaruserId": "uid-user1",
                     "eVarcandidateId": "cid-cid2:eid-eid2",
-                    "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId,events"
+                    "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId"
                 }]);
                 done();
             },client.interval*2);
@@ -327,7 +327,7 @@ describe('AA integration', () => {
                     "eVarsessionId": "sid-sid1",
                     "eVaruserId": "uid-user1",
                     "eVarcandidateId": "",
-                    "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId,events"
+                    "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId"
                 }]);
                 done();
             },client.interval*2);
@@ -383,16 +383,117 @@ describe('AA integration', () => {
                     "eVarsessionId": "sid-sid1",
                     "eVaruserId": "uid-user1",
                     "eVarcandidateId": "cid-cid1:eid-eid1",
-                    "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId,events"
+                    "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId"
                 }]);
                 expect(custom.mock.calls[1]).toEqual( [client, "o", "evolvids:contaminated", {
                     "eVarsessionId": "sid-sid1",
                     "eVaruserId": "uid-user1",
                     "eVarcandidateId": "cid-cid2:eid-eid2",
-                    "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId,events"
+                    "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId"
                 }]);
                 done();
             },client.interval*2);
+        });
+    });
+
+    describe('Ensure contaminations and confirmations only firing once per experiment', () => {
+        test('Validate emitted events fire for multiple experiments', () => {
+            var tl = jest.fn();
+            var on = jest.fn();
+            window['evolv'] = {
+                context: {
+                    sid: 'sid1',
+                    get: function (key: string) {
+                        if (key === 'experiments') {
+                            return {
+                                allocations: [{
+                                    uid: 'user1',
+                                    cid: 'cid1:eid1',
+                                    eid: 'eid1'
+                                }, {
+                                    uid: 'user1',
+                                    cid: 'cid2:eid2',
+                                    eid: 'eid2'
+                                }]
+                            }
+                        } else if (key === 'confirmations') {
+                            return [{
+                                cid: 'cid1:eid1'
+                            }]
+                        } else if (key === 'contaminations') {
+                            return [{
+                                cid: 'cid1:eid1'
+                            }]
+                        }
+                    }
+                },
+                client: {
+                    on: on
+                }
+            };
+
+            window['s'] = { tl: tl };
+
+            const client = new AAClient('sessionId', 'userId', 'candidateId');
+            client.sendMetricsForActiveCandidates('confirmed');
+            client.sendMetricsForActiveCandidates('contaminated');
+
+            window['evolv'].context.get = (key: string) => {
+                if (key === 'experiments') {
+                    return {
+                        allocations: [{
+                            uid: 'user1',
+                            cid: 'cid1:eid1',
+                            eid: 'eid1'
+                        }, {
+                            uid: 'user1',
+                            cid: 'cid2:eid2',
+                            eid: 'eid2'
+                        }]
+                    }
+                } else if (key === 'confirmations') {
+                    return [{
+                        cid: 'cid1:eid1'
+                    }, {
+                        cid: 'cid2:eid2'
+                    }]
+                } else if (key === 'contaminations') {
+                    return [{
+                        cid: 'cid1:eid1'
+                    }, {
+                        cid: 'cid2:eid2'
+                    }]
+                }
+            };
+
+            client.sendMetricsForActiveCandidates('confirmed');
+            client.sendMetricsForActiveCandidates('contaminated');
+
+            expect(tl.mock.calls.length).toBe(4);
+            expect(tl.mock.calls[0]).toEqual( [client, "o", "evolvids:confirmed", {
+                "eVarsessionId": "sid-sid1",
+                "eVaruserId": "uid-user1",
+                "eVarcandidateId": "cid-cid1:eid-eid1",
+                "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId"
+            }]);
+            expect(tl.mock.calls[1]).toEqual( [client, "o", "evolvids:contaminated", {
+                "eVarsessionId": "sid-sid1",
+                "eVaruserId": "uid-user1",
+                "eVarcandidateId": "cid-cid1:eid-eid1",
+                "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId"
+            }]);
+            expect(tl.mock.calls[2]).toEqual( [client, "o", "evolvids:confirmed", {
+                "eVarsessionId": "sid-sid1",
+                "eVaruserId": "uid-user1",
+                "eVarcandidateId": "cid-cid2:eid-eid2",
+                "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId"
+            }]);
+            expect(tl.mock.calls[3]).toEqual( [client, "o", "evolvids:contaminated", {
+                "eVarsessionId": "sid-sid1",
+                "eVaruserId": "uid-user1",
+                "eVarcandidateId": "cid-cid2:eid-eid2",
+                "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId"
+            }]);
         });
     });
 });

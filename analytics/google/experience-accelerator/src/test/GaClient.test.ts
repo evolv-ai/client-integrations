@@ -313,4 +313,111 @@ describe('GA integration', () => {
             },client.interval*2);
         });
     });
+
+    describe('Ensure contaminations and confirmations only firing once per experiment', () => {
+        test('Validate emitted events fire for multiple experiments', () => {
+            var ga = jest.fn();
+            window['ga'] = ga;
+            var on = jest.fn();
+            window['evolv'] = {
+                context: {
+                    sid: 'sid1',
+                    get: function (key: string) {
+                        if (key === 'experiments') {
+                            return {
+                                allocations: [{
+                                    uid: 'user1',
+                                    cid: 'cid1:eid1',
+                                    eid: 'eid1'
+                                }, {
+                                    uid: 'user1',
+                                    cid: 'cid2:eid2',
+                                    eid: 'eid2'
+                                }]
+                            }
+                        } else if (key === 'confirmations') {
+                            return [{
+                                cid: 'cid1:eid1'
+                            }]
+                        } else if (key === 'contaminations') {
+                            return [{
+                                cid: 'cid1:eid1'
+                            }]
+                        }
+                    }
+                },
+                client: {
+                    on: on
+                }
+            };
+
+            const client = new GAClient('trackingId', 'ns');
+            client.sendMetricsForActiveCandidates('confirmed');
+            client.sendMetricsForActiveCandidates('contaminated');
+
+            window['evolv'].context.get = (key: string) => {
+                if (key === 'experiments') {
+                    return {
+                        allocations: [{
+                            uid: 'user1',
+                            cid: 'cid1:eid1',
+                            eid: 'eid1'
+                        }, {
+                            uid: 'user1',
+                            cid: 'cid2:eid2',
+                            eid: 'eid2'
+                        }]
+                    }
+                } else if (key === 'confirmations') {
+                    return [{
+                        cid: 'cid1:eid1'
+                    }, {
+                        cid: 'cid2:eid2'
+                    }]
+                } else if (key === 'contaminations') {
+                    return [{
+                        cid: 'cid1:eid1'
+                    }, {
+                        cid: 'cid2:eid2'
+                    }]
+                }
+            };
+
+            client.sendMetricsForActiveCandidates('confirmed');
+            client.sendMetricsForActiveCandidates('contaminated');
+
+            expect(ga.mock.calls.length).toBe(8);
+
+            expect(ga.mock.calls[0]).toEqual( ["create", "trackingId", "auto", { "namespace": "ns" }]);
+            expect(ga.mock.calls[1]).toEqual( ["ns.send", "event", {
+                "eventAction": "evolv-event:cid-cid1:eid-eid1",
+                "eventCategory": "evolvids",
+                "eventLabel": "confirmed:uid-user1:sid-sid1",
+                "nonInteraction": true
+            }]);
+            expect(ga.mock.calls[2]).toEqual( ["create", "trackingId", "auto", { "namespace": "ns" }]);
+            expect(ga.mock.calls[3]).toEqual( ["ns.send", "event", {
+                "eventAction": "evolv-event:cid-cid1:eid-eid1",
+                "eventCategory": "evolvids",
+                "eventLabel": "contaminated:uid-user1:sid-sid1",
+                "nonInteraction": true
+            }]);
+
+            expect(ga.mock.calls[4]).toEqual( ["create", "trackingId", "auto", { "namespace": "ns" }]);
+            expect(ga.mock.calls[5]).toEqual( ["ns.send", "event", {
+                "eventAction": "evolv-event:cid-cid2:eid-eid2",
+                "eventCategory": "evolvids",
+                "eventLabel": "confirmed:uid-user1:sid-sid1",
+                "nonInteraction": true
+            }]);
+
+            expect(ga.mock.calls[6]).toEqual( ["create", "trackingId", "auto", { "namespace": "ns" }]);
+            expect(ga.mock.calls[7]).toEqual( ["ns.send", "event", {
+                "eventAction": "evolv-event:cid-cid2:eid-eid2",
+                "eventCategory": "evolvids",
+                "eventLabel": "contaminated:uid-user1:sid-sid1",
+                "nonInteraction": true
+            }]);
+        });
+    });
 });
