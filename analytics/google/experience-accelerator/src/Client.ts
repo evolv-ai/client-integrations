@@ -32,7 +32,7 @@ export abstract class Client {
         let contextKey = this.getContextKey(type);
         let candidates = this.getEvolv().context.get(contextKey) || [];
         for (let i = 0; i < candidates.length; i++) {
-            if (!this.activeCandidateEvents[type][candidates[i].cid]) {
+            if (this.activeCandidateEvents[type] && !this.activeCandidateEvents[type][candidates?.[i]?.cid]) {
                 const allocation = this.lookupFromAllocations(candidates[i].cid);
                 this.sendMetrics(type, allocation);
                this.activeCandidateEvents[type][candidates[i].cid] = true;
