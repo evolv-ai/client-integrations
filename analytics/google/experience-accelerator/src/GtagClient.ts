@@ -2,9 +2,6 @@ import {Client} from "./Client";
 
 export class GtagClient extends Client {
     constructor(
-        public readonly sessionIdDimension: string,
-        public readonly candidateIdDimension: string,
-        public readonly userIdDimension: string,
         public readonly maxWaitTime = 5000
     ) {
         super(maxWaitTime);
@@ -39,15 +36,11 @@ export class GtagClient extends Client {
             if (remaining) {
                 augmentedCidEid = augmentedCidEid + ':' + remaining;
             }
-
-            dataMap['dimension' + this.candidateIdDimension] = augmentedCidEid;
         }
 
-        dataMap['dimension' + this.userIdDimension] = augmentedUid;
-        dataMap['dimension' + this.sessionIdDimension] = augmentedSid;
         dataMap['event_category'] = 'evolvids';
         dataMap['event_label'] = type + ':' + augmentedUid + ':' + augmentedSid;
 
-        this.emit('event', augmentedCidEid, dataMap);
+        this.emit('event', 'evolv-event' + (augmentedCidEid ? ':' + augmentedCidEid : ''), dataMap);
     }
 }

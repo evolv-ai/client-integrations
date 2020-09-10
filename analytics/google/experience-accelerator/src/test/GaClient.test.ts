@@ -18,7 +18,7 @@ describe('GA integration', () => {
             };
             window['ga'] = ga;
 
-            const client = new GtagClient('sessionId', 'candidateId', 'userId');
+            const client = new GtagClient();
             expect(on.mock.calls.length).toBe(3);
             expect(on.mock.calls[0][0]).toBe("confirmed");
             expect(on.mock.calls[1][0]).toBe("contaminated");
@@ -30,7 +30,7 @@ describe('GA integration', () => {
             var on = jest.fn();
             window['ga'] = ga;
 
-            const client = new GtagClient('sessionId', 'candidateId', 'userId');
+            const client = new GtagClient();
 
             window['evolv'] = {
                 client: {
@@ -81,16 +81,13 @@ describe('GA integration', () => {
                 }
             };
 
-            const client = new GAClient('trackingId', 'ns','sessionId', 'candidateId', 'userId');
+            const client = new GAClient('trackingId', 'ns');
             client.sendMetricsForActiveCandidates('confirmed');
 
-            expect(ga.mock.calls.length).toBe(5);
+            expect(ga.mock.calls.length).toBe(2);
             expect(ga.mock.calls[0]).toEqual( ["create", "trackingId", "auto", { "namespace": "ns" }]);
-            expect(ga.mock.calls[1]).toEqual( ["ns.set", "dimensioncandidateId", "cid-cid1:eid-eid1:extra:extra2"]);
-            expect(ga.mock.calls[2]).toEqual( ["ns.set", "dimensionuserId", "uid-user1"]);
-            expect(ga.mock.calls[3]).toEqual( ["ns.set", "dimensionsessionId", "sid-sid1"]);
-            expect(ga.mock.calls[4]).toEqual( ["ns.send", "event", {
-                "eventAction": "cid-cid1:eid-eid1:extra:extra2",
+            expect(ga.mock.calls[1]).toEqual( ["ns.send", "event", {
+                "eventAction": "evolv-event:cid-cid1:eid-eid1:extra:extra2",
                 "eventCategory": "evolvids",
                 "eventLabel": "confirmed:uid-user1:sid-sid1",
                 "nonInteraction": true
@@ -131,28 +128,22 @@ describe('GA integration', () => {
                 }
             };
 
-            const client = new GAClient('trackingId', 'ns','sessionId', 'candidateId', 'userId');
+            const client = new GAClient('trackingId', 'ns');
             client.sendMetricsForActiveCandidates('confirmed');
 
-            expect(ga.mock.calls.length).toBe(10);
+            expect(ga.mock.calls.length).toBe(4);
 
             expect(ga.mock.calls[0]).toEqual( ["create", "trackingId", "auto", { "namespace": "ns" }]);
-            expect(ga.mock.calls[1]).toEqual( ["ns.set", "dimensioncandidateId", "cid-cid1:eid-eid1"]);
-            expect(ga.mock.calls[2]).toEqual( ["ns.set", "dimensionuserId", "uid-user1"]);
-            expect(ga.mock.calls[3]).toEqual( ["ns.set", "dimensionsessionId", "sid-sid1"]);
-            expect(ga.mock.calls[4]).toEqual( ["ns.send", "event", {
-                "eventAction": "cid-cid1:eid-eid1",
+            expect(ga.mock.calls[1]).toEqual( ["ns.send", "event", {
+                "eventAction": "evolv-event:cid-cid1:eid-eid1",
                 "eventCategory": "evolvids",
                 "eventLabel": "confirmed:uid-user1:sid-sid1",
                 "nonInteraction": true
             }]);
 
-            expect(ga.mock.calls[5]).toEqual( ["create", "trackingId", "auto", { "namespace": "ns" }]);
-            expect(ga.mock.calls[6]).toEqual( ["ns.set", "dimensioncandidateId", "cid-cid2:eid-eid2"]);
-            expect(ga.mock.calls[7]).toEqual( ["ns.set", "dimensionuserId", "uid-user1"]);
-            expect(ga.mock.calls[8]).toEqual( ["ns.set", "dimensionsessionId", "sid-sid1"]);
-            expect(ga.mock.calls[9]).toEqual( ["ns.send", "event", {
-                "eventAction": "cid-cid2:eid-eid2",
+            expect(ga.mock.calls[2]).toEqual( ["create", "trackingId", "auto", { "namespace": "ns" }]);
+            expect(ga.mock.calls[3]).toEqual( ["ns.send", "event", {
+                "eventAction": "evolv-event:cid-cid2:eid-eid2",
                 "eventCategory": "evolvids",
                 "eventLabel": "confirmed:uid-user1:sid-sid1",
                 "nonInteraction": true
@@ -192,19 +183,16 @@ describe('GA integration', () => {
                 }
             };
 
-            const client = new GAClient('trackingId', 'ns','sessionId', 'candidateId', 'userId');
+            const client = new GAClient('trackingId', 'ns');
             client.sendMetricsForActiveCandidates('confirmed');
 
             window['ga'] = ga;
 
             setTimeout(() => {
-                expect(ga.mock.calls.length).toBe(5);
+                expect(ga.mock.calls.length).toBe(2);
                 expect(ga.mock.calls[0]).toEqual( ["create", "trackingId", "auto", { "namespace": "ns" }]);
-                expect(ga.mock.calls[1]).toEqual( ["ns.set", "dimensioncandidateId", "cid-cid1:eid-eid1"]);
-                expect(ga.mock.calls[2]).toEqual( ["ns.set", "dimensionuserId", "uid-user1"]);
-                expect(ga.mock.calls[3]).toEqual( ["ns.set", "dimensionsessionId", "sid-sid1"]);
-                expect(ga.mock.calls[4]).toEqual( ["ns.send", "event", {
-                    "eventAction": "cid-cid1:eid-eid1",
+                expect(ga.mock.calls[1]).toEqual( ["ns.send", "event", {
+                    "eventAction": "evolv-event:cid-cid1:eid-eid1",
                     "eventCategory": "evolvids",
                     "eventLabel": "confirmed:uid-user1:sid-sid1",
                     "nonInteraction": true
@@ -246,30 +234,24 @@ describe('GA integration', () => {
                 }
             };
 
-            const client = new GAClient('trackingId', 'ns','sessionId', 'candidateId', 'userId');
+            const client = new GAClient('trackingId', 'ns');
             client.sendMetricsForActiveCandidates('contaminated');
 
             window['ga'] = ga;
 
             setTimeout(() => {
-                expect(ga.mock.calls.length).toBe(10);
+                expect(ga.mock.calls.length).toBe(4);
                 expect(ga.mock.calls[0]).toEqual( ["create", "trackingId", "auto", { "namespace": "ns" }]);
-                expect(ga.mock.calls[1]).toEqual( ["ns.set", "dimensioncandidateId", "cid-cid1:eid-eid1"]);
-                expect(ga.mock.calls[2]).toEqual( ["ns.set", "dimensionuserId", "uid-user1"]);
-                expect(ga.mock.calls[3]).toEqual( ["ns.set", "dimensionsessionId", "sid-sid1"]);
-                expect(ga.mock.calls[4]).toEqual( ["ns.send", "event", {
-                    "eventAction": "cid-cid1:eid-eid1",
+                expect(ga.mock.calls[1]).toEqual( ["ns.send", "event", {
+                    "eventAction": "evolv-event:cid-cid1:eid-eid1",
                     "eventCategory": "evolvids",
                     "eventLabel": "contaminated:uid-user1:sid-sid1",
                     "nonInteraction": true
                 }]);
 
-                expect(ga.mock.calls[5]).toEqual( ["create", "trackingId", "auto", { "namespace": "ns" }]);
-                expect(ga.mock.calls[6]).toEqual( ["ns.set", "dimensioncandidateId", "cid-cid2:eid-eid2"]);
-                expect(ga.mock.calls[7]).toEqual( ["ns.set", "dimensionuserId", "uid-user1"]);
-                expect(ga.mock.calls[8]).toEqual( ["ns.set", "dimensionsessionId", "sid-sid1"]);
-                expect(ga.mock.calls[9]).toEqual( ["ns.send", "event", {
-                    "eventAction": "cid-cid2:eid-eid2",
+                expect(ga.mock.calls[2]).toEqual( ["create", "trackingId", "auto", { "namespace": "ns" }]);
+                expect(ga.mock.calls[3]).toEqual( ["ns.send", "event", {
+                    "eventAction": "evolv-event:cid-cid2:eid-eid2",
                     "eventCategory": "evolvids",
                     "eventLabel": "contaminated:uid-user1:sid-sid1",
                     "nonInteraction": true
@@ -311,7 +293,7 @@ describe('GA integration', () => {
                 }
             };
 
-            const client = new GAClient('trackingId', 'ns','sessionId', 'candidateId', 'userId');
+            const client = new GAClient('trackingId', 'ns');
             client.sendMetrics('custom-event', {
                 uid: 'user1'
             });
@@ -319,13 +301,10 @@ describe('GA integration', () => {
             window['ga'] = ga;
 
             setTimeout(() => {
-                expect(ga.mock.calls.length).toBe(5);
+                expect(ga.mock.calls.length).toBe(2);
                 expect(ga.mock.calls[0]).toEqual( ["create", "trackingId", "auto", { "namespace": "ns" }]);
-                expect(ga.mock.calls[1]).toEqual( ["ns.set", "dimensioncandidateId", ""]);
-                expect(ga.mock.calls[2]).toEqual( ["ns.set", "dimensionuserId", "uid-user1"]);
-                expect(ga.mock.calls[3]).toEqual( ["ns.set", "dimensionsessionId", "sid-sid1"]);
-                expect(ga.mock.calls[4]).toEqual( ["ns.send", "event", {
-                    "eventAction": "",
+                expect(ga.mock.calls[1]).toEqual( ["ns.send", "event", {
+                    "eventAction": "evolv-event",
                     "eventCategory": "evolvids",
                     "eventLabel": "custom-event:uid-user1:sid-sid1",
                     "nonInteraction": true
