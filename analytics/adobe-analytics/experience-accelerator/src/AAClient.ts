@@ -35,7 +35,7 @@ export class AAClient extends Client {
 
         var y: any = {};
 
-        y.linkTrackVars = this.userIdDimensionType + this.userIdDimension + ',' + this.sessionIdDimensionType + this.sessionIdDimension + ',' + this.candidateIdDimensionType + this.candidateIdDimension + ',events';
+        y.linkTrackVars = this.userIdDimensionType + this.userIdDimension + ',' + this.sessionIdDimensionType + this.sessionIdDimension + ',' + this.candidateIdDimensionType + this.candidateIdDimension;
 
         y[this.candidateIdDimensionType + this.candidateIdDimension] = augmentedCidEid;
         y[this.userIdDimensionType + this.userIdDimension] = augmentedUid;
