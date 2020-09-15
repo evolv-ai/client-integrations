@@ -18,12 +18,12 @@ var Evolv=function(e){"use strict";var t=function(){function e(e,t,n,i,r,o){var 
 // Configure the integration 
 // with the parameters GAClient(TRACKING_ID, NAMESPACE, SESSION_ID_DIMENSION, CANDIDATE_ID_DIMENSION, USER_ID_SESSION)
 
-const client = new Evolv.GAClient("UA-164633832-3", "", "1", "2", "3");
+const client = new Evolv.GAClient("UA-164633832-3", "");
 
 OR
 
 // with the parameters GAClient(SESSION_ID_DIMENSION, CANDIDATE_ID_DIMENSION, USER_ID_SESSION)
 // note that Gtag implementation uses tracking ID configured on the site itself
 
-const client = new Evolv.GtagClient("1", "2", "3");
+const client = new Evolv.GtagClient();
 ```
