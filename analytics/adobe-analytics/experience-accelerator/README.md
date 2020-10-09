@@ -28,3 +28,12 @@ with the parameters AAClient(
         customEventHandler /* use this to handle emit events to Adobe yourself -- otherwise we use s.tl() */ )
 const client = AAClient('1', '2', '3', { 'confirmed': 'event1', 'contaminated': 'event2', 'checkout': 'event3' });                     
 ```
+
+If you wish to fire the information to Adobe yourself, implement the customerEventHandler.
+The custom event handler should be in the form:
+
+```
+function(linkObject, linkType, linkName, overrideVariable) {
+  // Implement code too notify Adobe Analytics
+}
+```
