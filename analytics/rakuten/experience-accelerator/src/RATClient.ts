@@ -12,12 +12,11 @@ export class RATClient extends Client {
     sendMetrics(type: string, event: any) {
         var augmentedUid = this.getAugmentedUid(event);
         let augmentedCidEid = this.getAugmentedCidEid(event);
-        let augmentedSid = this.getAugmentedSid();
 
-        this.sendRATEvent(augmentedUid, augmentedCidEid, augmentedSid);
+        this.sendRATEvent(augmentedUid, augmentedCidEid);
     }
 
-    sendRATEvent(userId: string, eidCid: string, sessionId: string) {
+    sendRATEvent(userId: string, eidCid: string) {
         var RAT_URL = 'https://rat.rakuten.co.jp';
 
         var data = {
@@ -26,8 +25,7 @@ export class RATClient extends Client {
           "etype": "async",
           "cp": {
               "userid": userId,
-              "candidateid": eidCid,
-              "sessionid": sessionId
+              "candidateid": eidCid
           }
         };
         try {

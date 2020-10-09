@@ -107,14 +107,5 @@ export abstract class Client {
         return augmentedUid;
     }
 
-    getAugmentedSid() {
-        let augmentedSid = '';
-        if (window.evolv.context.sid) {
-            augmentedSid = 'sid-' + window.evolv.context.sid;
-        }
-
-        return augmentedSid;
-    }
-
     abstract sendMetrics(type: string, event: any): void;
 }
