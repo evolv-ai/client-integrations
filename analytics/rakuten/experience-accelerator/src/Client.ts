@@ -82,38 +82,12 @@ export abstract class Client {
         }, this.interval);
     }
 
-    getAugmentedCidEid(event: any) {
-        let augmentedCidEid;
-        if (event.cid) {
-            var cidEid = event.cid.split(':');
-            augmentedCidEid = 'cid-' + cidEid[0] + ':eid-' + cidEid[1];
-
-            let remaining = cidEid.slice(2).join(':');
-            if (remaining) {
-                augmentedCidEid = augmentedCidEid + ':' + remaining;
-            }
-        } else {
-            augmentedCidEid = '';
-        }
-
-        return augmentedCidEid;
+    getCidEid(event: any) {
+        return event.cid ? event.cid : "";
     }
 
-    getAugmentedUid(event: any) {
-        let augmentedUid = '';
-        if (event.uid) {
-            augmentedUid = "uid-" + event.uid;
-        }
-        return augmentedUid;
-    }
-
-    getAugmentedSid() {
-        let augmentedSid = '';
-        if (window.evolv.context.sid) {
-            augmentedSid = 'sid-' + window.evolv.context.sid;
-        }
-
-        return augmentedSid;
+    getUid(event: any) {
+        return event.uid ? event.uid : "";
     }
 
     abstract sendMetrics(type: string, event: any): void;
