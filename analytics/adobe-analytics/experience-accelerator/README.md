@@ -26,7 +26,7 @@ with the parameters AAClient(
         candidateIdDimensionType /* default 'eVar' - values 'eVar' or 'prop'*/,
         maxWaitTime,
         customEventHandler /* use this to handle emit events to Adobe yourself -- otherwise we use s.tl() */ )
-const client = AAClient('1', '2', '3', { 'confirmed': 'event1', 'contaminated': 'event2', 'checkout': 'event3' });                     
+const client = new Evolv.AAClient('1', '2', '3', { 'confirmed': 'event1', 'contaminated': 'event2', 'checkout': 'event3' });                     
 ```
 
 If you wish to fire the information to Adobe yourself, implement the customerEventHandler.
