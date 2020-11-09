@@ -1,0 +1,29 @@
+{
+  "name": "evolv-exp-acc-cs-integration",
+  "version": "1.0.0",
+  "description": "Evolv Execution Plan integration code for Rakuten Analytics",
+  "main": "dist/evolv-exp-acc-cs.js",
+  "scripts": {
+    "build": "rollup --config ./rollup.config.js",
+    "test": "jest"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/jest": "^26.0.0",
+    "jest": "^26.0.1",
+    "rollup-plugin-terser": "^6.1.0",
+    "rollup-plugin-typescript2": "^0.27.1",
+    "rollup": "^2.23.0",
+    "ts-jest": "^26.1.0",
+    "typescript": "^3.9.5"
+  },
+  "dependencies": {},
+  "jest": {
+    "roots": [
+      "src"
+    ],
+    "testRegex": "(\\.|/)(test|spec)\\.tsx?$",
+    "preset": "ts-jest"
+  }
+}
