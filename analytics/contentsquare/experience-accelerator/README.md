@@ -1,4 +1,4 @@
-# Rakuten Analytics Experience Accelerator Integration
+# Content Square Experience Accelerator Integration
 
 ## To Build
 ```
