@@ -15,8 +15,6 @@ export class DLClient extends Client {
     }
 
     setDataLayerVars(userId: string, cidEid: string) {
-        var RAT_URL = 'https://rat.rakuten.co.jp';
-
         // CS integration should resplit the eid and cid
         var cidEidArray = cidEid.split(':');
 
