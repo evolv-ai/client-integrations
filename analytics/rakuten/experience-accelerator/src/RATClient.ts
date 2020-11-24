@@ -12,16 +12,20 @@ export class RATClient extends Client {
     sendMetrics(type: string, event: any) {
         var uid = this.getUid(event);
         let cidEid = this.getCidEid(event);
+        let sid = this.getSid();
 
-        this.sendRATEvent(uid, cidEid);
+        this.sendRATEvent(uid, sid, cidEid);
     }
 
-    sendRATEvent(userId: string, cidEid: string) {
+    sendRATEvent(userId: string, sessionId:string, cidEid: string) {
         var RAT_URL = 'https://rat.rakuten.co.jp';
 
-        // RAT integration should resplit the eid and cid
-        var cidEidArray = cidEid.split(':', 2);
-        var cid = cidEidArray[0];
+        // CS integration should resplit the eid and cid
+        var cidEidArray = cidEid.split(':');
+
+        // Make the whole thing the CID as you might have a third
+        // field for cloned candidates
+        var cid = cidEidArray.join(':');
         var eid = cidEidArray[1];
 
         var data = {
@@ -31,7 +35,8 @@ export class RATClient extends Client {
           "cp": {
               "userid": userId,
               "experimentid": eid,
-              "candidateid": cid
+              "candidateid": cid,
+              "sessionId": sessionId
           }
         };
         try {

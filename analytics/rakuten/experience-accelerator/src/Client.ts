@@ -82,6 +82,10 @@ export abstract class Client {
         }, this.interval);
     }
 
+    getSid() {
+        return window.evolv.context.sid;
+    }
+
     getCidEid(event: any) {
         return event.cid ? event.cid : "";
     }
