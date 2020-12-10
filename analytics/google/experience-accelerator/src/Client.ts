@@ -126,6 +126,20 @@ export abstract class Client {
         }, this.interval);
     }
 
+    getAugmentedOrdinal(event: any) {
+        if (!event.ordinal) {
+            return;
+        }
+        return 'ordinal-' + event.ordinal;
+    }
+
+    getAugmentedGroupId(event: any) {
+        if (!event.group_id) {
+            return;
+        }
+        return 'gid-' + event.group_id;
+    }
+
     getAugmentedCidEid(event: any) {
         let augmentedCidEid;
         if (event.cid) {

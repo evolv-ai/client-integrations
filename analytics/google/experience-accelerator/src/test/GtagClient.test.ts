@@ -201,4 +201,98 @@ describe('GA integration', () => {
             },client.interval*2);
         });
     });
+
+    describe('Ordinals present', () => {
+        var on = jest.fn();
+        let context = {
+            sid: 'sid1',
+            get: function (key: string) {
+                if (key === 'experiments') {
+                    return {
+                        allocations: [{
+                            uid: 'user1',
+                            cid: 'cid1:eid1',
+                            eid: 'eid1',
+                            ordinal: 1,
+                            group_id: 'group1'
+                        }, {
+                            uid: 'user1',
+                            cid: 'cid2:eid2',
+                            eid: 'eid2',
+                            ordinal : 2,
+                            group_id: 'group2'
+                        }]
+                    }
+                } else if (key === 'contaminations') {
+                    return [{
+                        cid: 'cid1:eid1'
+                    }, {
+                        cid: 'cid2:eid2'
+                    }]
+                }
+            }
+        };
+
+        test('Validate emitted events fire when ordinals present', done => {
+            var gtag = jest.fn();
+
+            window['evolv'] = {
+                context: context,
+                client: {
+                    on: on
+                }
+            };
+
+            const client = new GtagClient();
+            client.sendMetricsForActiveCandidates('contaminated');
+
+            window['gtag'] = gtag;
+
+            setTimeout(() => {
+                expect(gtag.mock.calls.length).toBe(2);
+                expect(gtag.mock.calls[0]).toEqual( ["event", "evolv-event:gid-group1:ordinal-1", {
+                    "event_category": "evolvids",
+                    "event_label": "contaminated:uid-user1:sid-sid1",
+                    "non_interaction": true
+                }]);
+                expect(gtag.mock.calls[1]).toEqual( ["event", "evolv-event:gid-group2:ordinal-2", {
+                    "event_category": "evolvids",
+                    "event_label": "contaminated:uid-user1:sid-sid1",
+                    "non_interaction": true
+                }]);
+                done();
+            },client.interval*2);
+        });
+
+        test('Validate emitted events fire when ordinals present - including the cid', done => {
+            var gtag = jest.fn();
+
+            window['evolv'] = {
+                context: context,
+                client: {
+                    on: on
+                }
+            };
+
+            const client = new GtagClient(1000, true);
+            client.sendMetricsForActiveCandidates('contaminated');
+
+            window['gtag'] = gtag;
+
+            setTimeout(() => {
+                expect(gtag.mock.calls.length).toBe(2);
+                expect(gtag.mock.calls[0]).toEqual( ["event", "evolv-event:gid-group1:ordinal-1:cid-cid1:eid-eid1", {
+                    "event_category": "evolvids",
+                    "event_label": "contaminated:uid-user1:sid-sid1",
+                    "non_interaction": true
+                }]);
+                expect(gtag.mock.calls[1]).toEqual( ["event", "evolv-event:gid-group2:ordinal-2:cid-cid2:eid-eid2", {
+                    "event_category": "evolvids",
+                    "event_label": "contaminated:uid-user1:sid-sid1",
+                    "non_interaction": true
+                }]);
+                done();
+            },client.interval*2);
+        });
+    });
 });
