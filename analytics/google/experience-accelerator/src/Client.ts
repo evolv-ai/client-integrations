@@ -67,6 +67,7 @@ export abstract class Client {
     }
 
     abstract getAnalytics(): any;
+    abstract checkAnalyticsProviders(): void;
 
     // Override for customer analytics processor
     getHandler(): any {
@@ -108,6 +109,7 @@ export abstract class Client {
             if ((Date.now() - begin) > this.maxWaitTime) {
                 clearInterval(intervalId);
                 console.log('Evolv: Analytics integration timed out - Couldn\'t find Analytics');
+                this.checkAnalyticsProviders();
                 return;
             }
 
