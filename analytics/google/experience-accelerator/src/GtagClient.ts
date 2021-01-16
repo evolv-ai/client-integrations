@@ -11,6 +11,13 @@ export class GtagClient extends Client {
         return window.gtag;
     }
 
+    checkAnalyticsProviders() {
+        // @ts-ignore
+        if ((window.GoogleAnalyticsObject && window[window.GoogleAnalyticsObject]) || window.ga) {
+            console.log('Evolv: Analytics integration detected GA - please use \'Evolv.GAClient()\'');
+        }
+    }
+
     sendMetrics(type: string, event: any) {
         let dataMap: { [key: string]: any; } = {
             'non_interaction': true
