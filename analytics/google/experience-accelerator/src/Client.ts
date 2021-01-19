@@ -54,9 +54,9 @@ export abstract class Client {
     private getContextKey(type: string) {
         switch (type) {
             case 'confirmed':
-                return 'confirmations';
+                return 'experiments.confirmations';
             case 'contaminated':
-                return 'contaminations';
+                return 'experiments.contaminations';
             default:
                 return '';
         }
