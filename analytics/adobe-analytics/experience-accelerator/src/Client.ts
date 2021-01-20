@@ -159,6 +159,20 @@ export abstract class Client {
         return augmentedSid;
     }
 
+    getAugmentedOrdinal(event: any) {
+        if (!event.ordinal) {
+            return;
+        }
+        return 'ordinal-' + event.ordinal;
+    }
+
+    getAugmentedGroupId(event: any) {
+        if (!event.group_id) {
+            return;
+        }
+        return 'gid-' + event.group_id;
+    }
+
     protected emit(...args: any[]) {
         const analytics = this.getAnalytics();
         if (analytics) {

@@ -2,7 +2,8 @@ import {Client} from "./Client";
 
 export class GtagClient extends Client {
     constructor(
-        public readonly maxWaitTime = 5000
+        public readonly maxWaitTime = 5000,
+        public readonly includeCidEid = false
     ) {
         super(maxWaitTime);
     }
@@ -16,31 +17,27 @@ export class GtagClient extends Client {
             'non_interaction': true
         };
 
-        var augmentedSid = '';
-        var augmentedCidEid = '';
-        var augmentedUid = '';
-
-        if (window.evolv.context.sid) {
-            augmentedSid = 'sid-' + window.evolv.context.sid;
-        }
-
-        if (event.uid) {
-            augmentedUid = "uid-" + event.uid;
-        }
-
-        if (event.cid) {
-            let cidEid = event.cid.split(':');
-            augmentedCidEid = 'cid-' + cidEid[0] + ':eid-' + cidEid[1];
-
-            let remaining = cidEid.slice(2).join(':');
-            if (remaining) {
-                augmentedCidEid = augmentedCidEid + ':' + remaining;
-            }
-        }
+        var augmentedSid = this.getAugmentedSid();
+        var augmentedCidEid = this.getAugmentedCidEid(event);
+        var augmentedUid = this.getAugmentedUid(event);
+        let augmentedGroupId = this.getAugmentedGroupId(event);
+        let augmentedOrdinal = this.getAugmentedOrdinal(event);
 
         dataMap['event_category'] = 'evolvids';
         dataMap['event_label'] = type + ':' + augmentedUid + ':' + augmentedSid;
+        let evolvEvent = 'evolv-event';
 
-        this.emit('event', 'evolv-event' + (augmentedCidEid ? ':' + augmentedCidEid : ''), dataMap);
+        let groupActionString;
+        if (augmentedOrdinal) {
+            groupActionString = `${evolvEvent}:${augmentedGroupId}:${augmentedOrdinal}`;
+
+            if (this.includeCidEid) {
+                groupActionString += `:${augmentedCidEid}`;
+            }
+        } else {
+            groupActionString = `${evolvEvent}:${augmentedCidEid}`;
+        }
+
+        this.emit('event', augmentedCidEid ? groupActionString : evolvEvent, dataMap);
     }
 }

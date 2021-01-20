@@ -4,7 +4,8 @@ export class GAClient extends Client {
     constructor(
         public readonly trackingId: string,
         public readonly namespace: string,
-        public readonly maxWaitTime = 5000
+        public readonly maxWaitTime = 5000,
+        public readonly includeCidEid = false
     ) {
         super(maxWaitTime);
     }
@@ -20,12 +21,29 @@ export class GAClient extends Client {
         var augmentedSid = this.getAugmentedSid();
         var augmentedUid = this.getAugmentedUid(event);
         let augmentedCidEid = this.getAugmentedCidEid(event);
+        let augmentedGroupId = this.getAugmentedGroupId(event);
+        let augmentedOrdinal = this.getAugmentedOrdinal(event);
 
         this.emit('create', this.trackingId, 'auto', namespace ? {namespace} : null);
 
+        let evolvEvent = 'evolv-event';
+
+        let groupActionString;
+        if (augmentedOrdinal) {
+            groupActionString = `${evolvEvent}:${augmentedGroupId}:${augmentedOrdinal}`;
+
+            if (this.includeCidEid) {
+                groupActionString += `:${augmentedCidEid}`;
+            }
+        } else if (augmentedCidEid) {
+            groupActionString = `${evolvEvent}:${augmentedCidEid}`;
+        } else {
+            groupActionString = `${evolvEvent}`;
+        }
+
         this.emit(prefix + 'send', 'event', { 
             'eventCategory': 'evolvids',
-            'eventAction': 'evolv-event' + (augmentedCidEid ? ':' + augmentedCidEid : ''),
+            'eventAction': groupActionString,
             'eventLabel': type + ':' + augmentedUid + ':' + augmentedSid,
             'nonInteraction': true
         });

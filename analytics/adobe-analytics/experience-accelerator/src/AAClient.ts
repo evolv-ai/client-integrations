@@ -1,22 +1,32 @@
 import { Client } from "./Client";
+type Dimensions = "session" | "user" | "candidate" | "group" | "ordinal"
+type DimensionsValue = { key: string, type?: string };
+type DimensionsMap = { [dimension in Dimensions]?: DimensionsValue};
 
 export class AAClient extends Client {
     constructor(
-        public readonly sessionIdDimension: string,
-        public readonly userIdDimension: string,
-        public readonly candidateIdDimension: string,
-        public readonly sessionIdDimensionType = 'eVar',
-        public readonly userIdDimensionType = 'eVar',
-        public readonly candidateIdDimensionType = 'eVar',
+        public readonly dimensions: DimensionsMap,
         public readonly maxWaitTime = 5000,
         public readonly customEventHandler?: () => {}
     ) {
         super(maxWaitTime);
 
-        if (!(sessionIdDimensionType === 'eVar' || sessionIdDimensionType === 'prop')
-            || !(candidateIdDimensionType === 'eVar' || candidateIdDimensionType === 'prop')
-            || !(userIdDimensionType === 'eVar' || userIdDimensionType === 'prop')) {
-            throw new Error('Dimension types must be "eVar" or "prop"')
+        this.validateDimension('session');
+        this.validateDimension('user');
+        this.validateDimension('candidate');
+        this.validateDimension('group');
+        this.validateDimension('ordinal');
+    }
+
+    validateDimension(name: Dimensions) {
+        // @ts-ignore
+        if (this.dimensions[name] && this.dimensions[name].type && this.dimensions[name].type !== 'eVar' && this.dimensions[name].type !== 'prop') {
+            throw new Error(`${name}:Dimension types must be "eVar" or "prop"`);
+        }
+
+        // @ts-ignore
+        if (this.dimensions[name] && !this.dimensions[name].key) {
+            throw new Error(`${name}: Dimension key must be defined`);
         }
     }
 
@@ -28,18 +38,42 @@ export class AAClient extends Client {
         return this.customEventHandler || this.getAnalytics();
     }
 
+    getDimensionForAdobe(dimension: DimensionsValue) {
+        return (dimension.type || 'eVar') + dimension.key;
+    }
+
     sendMetrics(type: string, event: any) {
         var augmentedSid = this.getAugmentedSid();
         var augmentedUid = this.getAugmentedUid(event);
         let augmentedCidEid = this.getAugmentedCidEid(event);
+        let augmentedGroupId = this.getAugmentedGroupId(event);
+        let augmentedOrdinal = this.getAugmentedOrdinal(event);
 
         var y: any = {};
 
-        y.linkTrackVars = this.userIdDimensionType + this.userIdDimension + ',' + this.sessionIdDimensionType + this.sessionIdDimension + ',' + this.candidateIdDimensionType + this.candidateIdDimension;
+        y.linkTrackVars = Object.values(this.dimensions).map((value: DimensionsValue | undefined) => {
+            return value && this.getDimensionForAdobe(value);
+        }).join(',');
 
-        y[this.candidateIdDimensionType + this.candidateIdDimension] = augmentedCidEid;
-        y[this.userIdDimensionType + this.userIdDimension] = augmentedUid;
-        y[this.sessionIdDimensionType + this.sessionIdDimension] =  augmentedSid;
+        if (this.dimensions.candidate) {
+            y[this.getDimensionForAdobe(this.dimensions.candidate)] = augmentedCidEid;
+        }
+
+        if (this.dimensions.user) {
+            y[this.getDimensionForAdobe(this.dimensions.user)] = augmentedUid;
+        }
+
+        if (this.dimensions.session) {
+            y[this.getDimensionForAdobe(this.dimensions.session)] = augmentedSid;
+        }
+
+        if (this.dimensions.group) {
+            y[this.getDimensionForAdobe(this.dimensions.group)] = augmentedGroupId;
+        }
+
+        if (this.dimensions.ordinal) {
+            y[this.getDimensionForAdobe(this.dimensions.ordinal)] = augmentedOrdinal;
+        }
 
         this.emit(this,'o', 'evolvids:' + type, y);
     }

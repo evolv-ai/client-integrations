@@ -16,16 +16,20 @@ These can be added directly to the page and used to configure the integration
 var Evolv=function(e){"use strict";var t=function(){function e(e,t,n,i,r,o){var d=th...
 
 // Configure the integration 
-with the parameters AAClient( 
-        sessionIdDimension: string,
-        userIdDimension
-        candidateIdDimension,
-        sessionIdDimensionType /* default 'eVar' - values 'eVar' or 'prop'*/,
-        userIdDimensionType /* default 'eVar' - values 'eVar' or 'prop'*/,
-        candidateIdDimensionType /* default 'eVar' - values 'eVar' or 'prop'*/,
+type Dimensions = "session" | "user" | "candidate" | "group" | "ordinal"
+type DimensionsValue = { key: string, type?: eVar (default) or prop };
+type DimensionsMap = { [dimension in Dimensions]?: DimensionsValue};
+
+with the parameters AAClient(
+        dimensions: DimensionsMap      
         maxWaitTime,
         customEventHandler /* use this to handle emit events to Adobe yourself -- otherwise we use s.tl() */ )
-const client = new Evolv.AAClient('1', '2', '3');                     
+const client = new Evolv.AAClient({
+    user: { value: 1},
+    sessions: { value: 2},
+    group: { value: 3},
+    ordinal: { value: 4}
+});                     
 ```
 
 If you wish to fire the information to Adobe yourself, implement the customerEventHandler.

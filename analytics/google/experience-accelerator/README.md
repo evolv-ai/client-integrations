@@ -16,13 +16,13 @@ These can be added directly to the page and used to configure the integration
 var Evolv=function(e){"use strict";var t=function(){function e(e,t,n,i,r,o){var d=th...
 
 // Configure the integration 
-// with the parameters GAClient(TRACKING_ID, NAMESPACE)
+// with the parameters GAClient(TRACKING_ID, NAMESPACE, WAIT TIME - OPTIONAL - DEFAULT 5000, INCLUDE CID EID - OPTIONAL - DEFAULT false)
 
-const client = new Evolv.GAClient("UA-164633832-3", "");
+const client = new Evolv.GAClient("UA-164633832-3", "", 5000, false);
 
 OR
 
-// with the parameters GtagClient()
+// with the parameters GtagClient(WAIT TIME - OPTIONAL - DEFAULT 5000, INCLUDE CID EID - OPTIONAL - DEFAULT false)
 // note that Gtag implementation uses tracking ID configured on the site itself
 
 const client = new Evolv.GtagClient();

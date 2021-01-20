@@ -17,7 +17,11 @@ describe('AA integration', () => {
             };
             window['s'] = { tl: tl };
 
-            const client = new AAClient('sessionId', 'userId', 'candidateId');
+            const client = new AAClient({
+                session: { key: 'sessionId' },
+                user: { key: 'userId' },
+                candidate: { key: 'candidateId' }
+            });
             expect(on.mock.calls.length).toBe(3);
             expect(on.mock.calls[0][0]).toBe("confirmed");
             expect(on.mock.calls[1][0]).toBe("contaminated");
@@ -29,7 +33,11 @@ describe('AA integration', () => {
             var on = jest.fn();
             window['s'] = { tl: tl };
 
-            const client = new AAClient('sessionId', 'userId', 'candidateId');
+            const client = new AAClient({
+                session: { key: 'sessionId' },
+                user: { key: 'userId' },
+                candidate: { key: 'candidateId' }
+            });
 
             window['evolv'] = {
                 client: {
@@ -51,7 +59,11 @@ describe('AA integration', () => {
         test('Validate errors with no confirmmed event configured', () => {
             let errored = false;
             try {
-                const client = new AAClient('sessionId', 'userId', 'candidateId');
+                const client = new AAClient({
+                    session: { key: 'sessionId' },
+                    user: { key: 'userId' },
+                    candidate: { key: 'candidateId' }
+                });
                 expect(1).toBe(2); // Should not get here - should error
             } catch(err) {
                 errored = true;
@@ -63,7 +75,11 @@ describe('AA integration', () => {
         test('Validate errors with wrong session dimension type', () => {
             let errored = false;
             try {
-                const client = new AAClient('sessionId', 'userId', 'candidateId', 'wrong');
+                const client = new AAClient({
+                    session: {key: 'sessionId', type: 'wrong'},
+                    user: {key: 'userId', type: 'prop'},
+                    candidate: {key: 'candidateId'}
+                });
                 expect(1).toBe(2); // Should not get here - should error
             } catch(err) {
                 errored = true;
@@ -75,21 +91,11 @@ describe('AA integration', () => {
         test('Validate errors with wrong user dimension type', () => {
             let errored = false;
             try {
-                const client = new AAClient('sessionId', 'userId', 'candidateId'
-                    , 'eVar', 'wrong');
-                expect(1).toBe(2); // Should not get here - should error
-            } catch(err) {
-                errored = true;
-            }
-
-            expect(errored).toBe(true);
-        });
-
-        test('Validate errors with wrong user dimension type', () => {
-            let errored = false;
-            try {
-                const client = new AAClient('sessionId', 'userId', 'candidateId'
-                    , 'eVar', 'eVar', 'wrong');
+                const client = new AAClient({
+                    session: { key: 'sessionId' },
+                    user: { key: 'userId', type: 'wrong' },
+                    candidate: { key: 'candidateId' }
+                });
                 expect(1).toBe(2); // Should not get here - should error
             } catch(err) {
                 errored = true;
@@ -101,8 +107,11 @@ describe('AA integration', () => {
         test('Validate no errors with correct config - eVar', () => {
             let errored = false;
             try {
-                const client = new AAClient('sessionId', 'userId', 'candidateId'
-                    , 'eVar', 'eVar', 'eVar');
+                const client = new AAClient({
+                    session: { key: 'sessionId', type: 'eVar' },
+                    user: { key: 'userId', type: 'eVar' },
+                    candidate: { key: 'candidateId', type: 'eVar' }
+                });
             } catch(err) {
                 errored = true;
             }
@@ -113,8 +122,11 @@ describe('AA integration', () => {
         test('Validate no errors with correct config - prop', () => {
             let errored = false;
             try {
-                const client = new AAClient('sessionId', 'userId', 'candidateId'
-                    , 'prop', 'prop', 'prop');
+                const client = new AAClient({
+                    session: { key: 'sessionId', type: 'prop' },
+                    user: { key: 'userId', type: 'prop' },
+                    candidate: { key: 'candidateId', type: 'prop' }
+                });
             } catch(err) {
                 errored = true;
             }
@@ -154,9 +166,11 @@ describe('AA integration', () => {
                 }
             };
 
-            const client = new AAClient('sessionId', 'userId', 'candidateId'
-                , 'prop', 'prop', 'prop',
-                5000, custom);
+            const client = new AAClient({
+                session: { key: 'sessionId', type: 'prop' },
+                user: { key: 'userId', type: 'prop' },
+                candidate: { key: 'candidateId', type: 'prop' }
+            }, 5000, custom);
             client.sendMetricsForActiveCandidates('contaminated');
 
             window['s'] = {tl: tl};
@@ -168,7 +182,7 @@ describe('AA integration', () => {
                     "propsessionId": "sid-sid1",
                     "propuserId": "uid-user1",
                     "propcandidateId": "cid-cid1:eid-eid1",
-                    "linkTrackVars": "propuserId,propsessionId,propcandidateId"
+                    "linkTrackVars": "propsessionId,propuserId,propcandidateId"
                 }]);
                 done();
             }, client.interval * 2);
@@ -207,7 +221,11 @@ describe('AA integration', () => {
                 }
             };
 
-            const client = new AAClient('sessionId', 'userId', 'candidateId');
+            const client = new AAClient({
+                session: { key: 'sessionId' },
+                user: { key: 'userId' },
+                candidate: { key: 'candidateId' }
+            });
             client.sendMetricsForActiveCandidates('confirmed');
 
             window['s'] = { tl: tl };
@@ -218,7 +236,7 @@ describe('AA integration', () => {
                     "eVarsessionId": "sid-sid1",
                     "eVaruserId": "uid-user1",
                     "eVarcandidateId": "cid-cid1:eid-eid1:extra",
-                    "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId"
+                    "linkTrackVars": "eVarsessionId,eVaruserId,eVarcandidateId"
                 }]);
                 done();
             }, client.interval*2);
@@ -257,7 +275,11 @@ describe('AA integration', () => {
                 }
             };
 
-            const client = new AAClient('sessionId', 'userId', 'candidateId');
+            const client = new AAClient({
+                session: { key: 'sessionId' },
+                user: { key: 'userId' },
+                candidate: { key: 'candidateId' }
+            });
             client.sendMetricsForActiveCandidates('contaminated');
 
             window['s'] = { tl: tl };
@@ -268,13 +290,13 @@ describe('AA integration', () => {
                     "eVarsessionId": "sid-sid1",
                     "eVaruserId": "uid-user1",
                     "eVarcandidateId": "cid-cid1:eid-eid1",
-                    "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId"
+                    "linkTrackVars": "eVarsessionId,eVaruserId,eVarcandidateId"
                 }]);
                 expect(tl.mock.calls[1]).toEqual( [client, "o", "evolvids:contaminated", {
                     "eVarsessionId": "sid-sid1",
                     "eVaruserId": "uid-user1",
                     "eVarcandidateId": "cid-cid2:eid-eid2",
-                    "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId"
+                    "linkTrackVars": "eVarsessionId,eVaruserId,eVarcandidateId"
                 }]);
                 done();
             },client.interval*2);
@@ -314,7 +336,11 @@ describe('AA integration', () => {
                 }
             };
 
-            const client = new AAClient('sessionId', 'userId', 'candidateId');
+            const client = new AAClient({
+                session: { key: 'sessionId' },
+                user: { key: 'userId' },
+                candidate: { key: 'candidateId' }
+            });
             client.sendMetrics('custom-event', {
                 uid: 'user1'
             });
@@ -327,7 +353,7 @@ describe('AA integration', () => {
                     "eVarsessionId": "sid-sid1",
                     "eVaruserId": "uid-user1",
                     "eVarcandidateId": "",
-                    "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId"
+                    "linkTrackVars": "eVarsessionId,eVaruserId,eVarcandidateId"
                 }]);
                 done();
             },client.interval*2);
@@ -369,9 +395,12 @@ describe('AA integration', () => {
                 }
             };
 
-            const client = new AAClient('sessionId', 'userId', 'candidateId'
-                , 'eVar', 'eVar', 'eVar',
-                5000, custom);
+            const client = new AAClient({
+                session: { key: 'sessionId', type: 'eVar' },
+                user: { key: 'userId', type: 'eVar' },
+                candidate: { key: 'candidateId', type: 'eVar' }
+            }, 5000, custom);
+
             client.sendMetricsForActiveCandidates('contaminated');
 
             window['s'] = { tl: tl };
@@ -383,13 +412,13 @@ describe('AA integration', () => {
                     "eVarsessionId": "sid-sid1",
                     "eVaruserId": "uid-user1",
                     "eVarcandidateId": "cid-cid1:eid-eid1",
-                    "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId"
+                    "linkTrackVars": "eVarsessionId,eVaruserId,eVarcandidateId"
                 }]);
                 expect(custom.mock.calls[1]).toEqual( [client, "o", "evolvids:contaminated", {
                     "eVarsessionId": "sid-sid1",
                     "eVaruserId": "uid-user1",
                     "eVarcandidateId": "cid-cid2:eid-eid2",
-                    "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId"
+                    "linkTrackVars": "eVarsessionId,eVaruserId,eVarcandidateId"
                 }]);
                 done();
             },client.interval*2);
@@ -409,11 +438,15 @@ describe('AA integration', () => {
                                 allocations: [{
                                     uid: 'user1',
                                     cid: 'cid1:eid1',
-                                    eid: 'eid1'
+                                    eid: 'eid1',
+                                    ordinal: 1,
+                                    group_id: 'group1'
                                 }, {
                                     uid: 'user1',
                                     cid: 'cid2:eid2',
-                                    eid: 'eid2'
+                                    eid: 'eid2',
+                                    ordinal: 2,
+                                    group_id: 'group2'
                                 }]
                             }
                         } else if (key === 'confirmations') {
@@ -434,7 +467,13 @@ describe('AA integration', () => {
 
             window['s'] = { tl: tl };
 
-            const client = new AAClient('sessionId', 'userId', 'candidateId');
+            const client = new AAClient({
+                session: { key: 'sessionId' },
+                user: { key: 'userId' },
+                candidate: { key: 'candidateId' },
+                ordinal: { key: 'ordinalId' },
+                group: { key: 'groupId' },
+            });
             client.sendMetricsForActiveCandidates('confirmed');
             client.sendMetricsForActiveCandidates('contaminated');
 
@@ -444,11 +483,15 @@ describe('AA integration', () => {
                         allocations: [{
                             uid: 'user1',
                             cid: 'cid1:eid1',
-                            eid: 'eid1'
+                            eid: 'eid1',
+                            ordinal: 1,
+                            group_id: 'group1'
                         }, {
                             uid: 'user1',
                             cid: 'cid2:eid2',
-                            eid: 'eid2'
+                            eid: 'eid2',
+                            ordinal: 2,
+                            group_id: 'group2'
                         }]
                     }
                 } else if (key === 'confirmations') {
@@ -474,25 +517,33 @@ describe('AA integration', () => {
                 "eVarsessionId": "sid-sid1",
                 "eVaruserId": "uid-user1",
                 "eVarcandidateId": "cid-cid1:eid-eid1",
-                "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId"
+                "eVargroupId": "gid-group1",
+                "eVarordinalId": "ordinal-1",
+                "linkTrackVars": "eVarsessionId,eVaruserId,eVarcandidateId,eVarordinalId,eVargroupId"
             }]);
             expect(tl.mock.calls[1]).toEqual( [client, "o", "evolvids:contaminated", {
                 "eVarsessionId": "sid-sid1",
                 "eVaruserId": "uid-user1",
                 "eVarcandidateId": "cid-cid1:eid-eid1",
-                "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId"
+                "eVargroupId": "gid-group1",
+                "eVarordinalId": "ordinal-1",
+                "linkTrackVars": "eVarsessionId,eVaruserId,eVarcandidateId,eVarordinalId,eVargroupId"
             }]);
             expect(tl.mock.calls[2]).toEqual( [client, "o", "evolvids:confirmed", {
                 "eVarsessionId": "sid-sid1",
                 "eVaruserId": "uid-user1",
                 "eVarcandidateId": "cid-cid2:eid-eid2",
-                "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId"
+                "eVargroupId": "gid-group2",
+                "eVarordinalId": "ordinal-2",
+                "linkTrackVars": "eVarsessionId,eVaruserId,eVarcandidateId,eVarordinalId,eVargroupId"
             }]);
             expect(tl.mock.calls[3]).toEqual( [client, "o", "evolvids:contaminated", {
                 "eVarsessionId": "sid-sid1",
                 "eVaruserId": "uid-user1",
                 "eVarcandidateId": "cid-cid2:eid-eid2",
-                "linkTrackVars": "eVaruserId,eVarsessionId,eVarcandidateId"
+                "eVargroupId": "gid-group2",
+                "eVarordinalId": "ordinal-2",
+                "linkTrackVars": "eVarsessionId,eVaruserId,eVarcandidateId,eVarordinalId,eVargroupId"
             }]);
         });
     });
