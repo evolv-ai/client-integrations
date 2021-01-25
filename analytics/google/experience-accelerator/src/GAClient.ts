@@ -15,6 +15,13 @@ export class GAClient extends Client {
         return (window.GoogleAnalyticsObject && window[window.GoogleAnalyticsObject]) || window.ga;
     }
 
+    checkAnalyticsProviders() {
+        // @ts-ignore
+        if (window.google_tag_manager || window.gtag) {
+            console.log('Evolv: Analytics integration detected Google Tag Manager - please use \'Evolv.GtagClient()\'');
+        }
+    }
+
     sendMetrics(type: string, event: any) {
         const namespace = this.namespace;
         const prefix = namespace ? namespace + '.' : '';

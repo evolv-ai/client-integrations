@@ -1,10 +1,54 @@
 import { GAClient } from "../GAClient";
-import {GtagClient} from "../GtagClient";
+import { GtagClient } from "../GtagClient";
+
+let logSpy: any;
 
 describe('GA integration', () => {
     beforeEach(() => {
         delete window['evolv'];
         delete window['ga'];
+        logSpy = jest.spyOn(console, "log").mockImplementation();
+    });
+
+    afterEach(() => {
+        logSpy.mockClear();
+    });
+
+    describe('Handle missing GA ', () => {
+        test('Log message if GA is not found', (done) => {
+            window['evolv'] = {
+                client: {
+                    on: jest.fn()
+                }
+            };
+
+            const client = new GAClient('trackingId', 'ns', 0);
+
+            setTimeout(() => {
+                expect(logSpy.mock.calls.length).toBe(1);
+                expect(logSpy.mock.calls[0][0]).toBe("Evolv: Analytics integration timed out - Couldn't find Analytics");
+                done();
+            }, client.interval);
+        });
+
+        test('Log message if GA is not found, but GTM is present', (done) => {
+            window['evolv'] = {
+                client: {
+                    on: jest.fn()
+                }
+            };
+
+            window['gtag'] = jest.fn();
+
+            const client = new GAClient('trackingId', 'ns', 0);
+
+            setTimeout(() => {
+                expect(logSpy.mock.calls.length).toBe(2);
+                expect(logSpy.mock.calls[0][0]).toBe("Evolv: Analytics integration timed out - Couldn't find Analytics");
+                expect(logSpy.mock.calls[1][0]).toBe("Evolv: Analytics integration detected Google Tag Manager - please use 'Evolv.GtagClient()'");
+                done();
+            }, client.interval);
+        });
     });
 
     describe('Ensure listeners set up', () => {
