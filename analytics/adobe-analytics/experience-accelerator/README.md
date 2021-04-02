@@ -15,20 +15,23 @@ These can be added directly to the page and used to configure the integration
 // Copy the file contents
 var Evolv=function(e){"use strict";var t=function(){function e(e,t,n,i,r,o){var d=th...
 
-// Configure the integration 
-type Dimensions = "session" | "user" | "candidate" | "group" | "ordinal"
-type DimensionsValue = { key: string, type?: eVar (default) or prop };
-type DimensionsMap = { [dimension in Dimensions]?: DimensionsValue};
+// Configure the integration using this structure for dimensions
+//
+// type Dimensions = "session" | "user" | "candidate" | "group" | "ordinal"
+// type DimensionsValue = { key: string, type?: eVar (default) or prop };
+// type DimensionsMap = { [dimension in Dimensions]?: DimensionsValue};
 
-with the parameters AAClient(
-        dimensions: DimensionsMap      
-        maxWaitTime,
-        customEventHandler /* use this to handle emit events to Adobe yourself -- otherwise we use s.tl() */ )
+// Example AAClient(
+//        dimensions: DimensionsMap      
+//        maxWaitTime,
+//        customEventHandler /* use this to handle emit events to Adobe yourself -- otherwise we use s.tl() */ )
+
 const client = new Evolv.AAClient({
-    user: { value: 1},
-    sessions: { value: 2},
-    group: { value: 3},
-    ordinal: { value: 4}
+    user: { key: 1},
+    sessions: { key: 2},
+    candidate: { key: 3},
+    group: { key: 4},
+    ordinal: { key: 5}
 });                     
 ```
 
