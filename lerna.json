@@ -3,5 +3,11 @@
     "packages/*",
     "packages/google/*"
   ],
-  "version": "independent"
+  "version": "independent",
+  "command": {
+    "version": {
+      "allowBranch": ["feat/AP-40"],
+      "message": "chore(release): publish"
+    }
+  }
 }
