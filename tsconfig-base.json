@@ -1,0 +1,27 @@
+{
+	"compilerOptions": {
+		"target": "esnext",
+		"module": "esnext",
+		"moduleResolution": "node",
+		"composite": true,
+		"declarationMap": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"outDir": "dist",
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"lib": [
+			"dom",
+			"dom.iterable",
+			"esnext",
+			"es2020.promise"
+		]
+	},
+	"exclude": [
+		"node_modules"
+	]
+}
