@@ -1,0 +1,10 @@
+{
+	"extends": "../../../tsconfig-base.json",
+	"compilerOptions": {
+		"declaration": true,
+		"sourceMap": true
+	},
+	"references": [
+		{ "path": "../../base-client" }
+	]
+}

@@ -1,0 +1,7 @@
+{
+  "packages": [
+    "packages/*",
+    "packages/google/*"
+  ],
+  "version": "independent"
+}
