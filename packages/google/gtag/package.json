@@ -1,6 +1,6 @@
 {
   "name": "@evolv-integrations/google-analytics-gtag",
-  "version": "0.0.1-alpha.2",
+  "version": "0.0.2-alpha.0",
   "description": "Evolv integration code for Google Analytics",
   "private": false,
   "main": "dist/index.js",
@@ -24,7 +24,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@evolv-integrations/base-client": "^0.0.1-alpha.3"
+    "@evolv-integrations/base-client": "^0.0.2-alpha.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^19.0.0",
