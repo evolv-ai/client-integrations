@@ -6,7 +6,7 @@
 	},
 	"references": [
 		{ "path": "./packages/base-client/src" },
-		{ "path": "./packages/google/google-analytics/src" },
-		{ "path": "./packages/google/gtag/src" }
+		{ "path": "./packages/google/gtag/src" },
+		{ "path": "./packages/google/ua/src" }
 	]
 }
