@@ -1,10 +1,4 @@
 
-var sentEventAllocations = {
-  confirmed: {},
-  contaminated: {},
-  others: {}
-};
-
 var eventKeys = {
   confirmed: 'experiments.confirmations',
   contaminated: 'experiments.contaminations'
@@ -23,7 +17,7 @@ function findAllocation(cid) {
   }
 }
 
-function sendAllocations(eventType, emit) {
+function sendAllocations(eventType, emit, sentEventAllocations) {
   var sentAllocations = sentEventAllocations[eventType] || sentEventAllocations.others;
   var eventKey = eventKeys[eventType] || '';
   var candidates = window.evolv.context.get(eventKey) || [];
@@ -42,6 +36,11 @@ function sendAllocations(eventType, emit) {
 function listenToEvents(config){
   var poll = config.poll || {duration: 2000, interval:50};
   var events = config.events || ['confirmed'];
+  var sentEventAllocations = {
+    confirmed: {},
+    contaminated: {},
+    others: {}
+  };
   var emitCheck = config.check;
   var emit = config.emit;
 
@@ -50,7 +49,7 @@ function listenToEvents(config){
   function bindListener() {
     events.forEach(function(eventType){
       function emitAllocations(){
-        sendAllocations(eventType, emit)
+        sendAllocations(eventType, emit, sentEventAllocations)
       }
       window.evolv.client.on(eventType, function (type) {
         waitFor(emitCheck, emitAllocations, poll);
