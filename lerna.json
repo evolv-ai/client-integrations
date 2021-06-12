@@ -6,7 +6,7 @@
   "version": "independent",
   "command": {
     "version": {
-      "allowBranch": ["feat/AP-40"],
+      "allowBranch": ["master"],
       "message": "chore(release): publish"
     }
   }
