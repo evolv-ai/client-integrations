@@ -5,8 +5,8 @@
 		"experimentalDecorators": true
 	},
 	"references": [
-		{ "path": "./packages/base-client/src" },
+		{ "path": "./packages/analytics-adapter/src"},
 		{ "path": "./packages/google/gtag/src" },
-		{ "path": "./packages/google/ua/src" }
+		{ "path": "./packages/google/ga/src" }
 	]
 }

@@ -24,6 +24,10 @@ jobs:
           npm ci --production=false
           npx lerna bootstrap -- --production=false
 
+      - name: Build packages
+        run: |
+          npx lerna run build
+
       - name: Publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,5 +1,5 @@
-// import commonJs from '@rollup/plugin-commonjs';
-// import nodeResolve from '@rollup/plugin-node-resolve';
+import commonJs from '@rollup/plugin-commonjs';
+import nodeResolve from '@rollup/plugin-node-resolve';
 import typescript from 'rollup-plugin-typescript2';
 
 
@@ -14,10 +14,10 @@ const configFactory = (module) => {
 	return {
 		input: './src/index.ts',
 		plugins: [
-			// nodeResolve({
-			// 	browser: true
-			// }),
-			// commonJs(),
+			nodeResolve({
+				browser: true
+			}),
+			commonJs(),
 			typescript({
 				tsconfig: 'tsconfig.json',
 				tsconfigOverride: {
