@@ -1,6 +1,6 @@
-import { Client } from '@evolv-integrations/base-client';
+import { BaseAdapter } from '@evolv-integrations/analytics-adapter';
 
-export class GAClient extends Client {
+export class GaAdapter extends BaseAdapter {
     constructor(
         public readonly trackingId: string,
         public readonly namespace: string,

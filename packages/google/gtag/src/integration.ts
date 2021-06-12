@@ -1,4 +1,4 @@
-import { GtagClient } from './client';
+import { GtagAdapter } from './adapter';
 
 export interface Config {
 	maxWaitTime?: number;
@@ -6,5 +6,5 @@ export interface Config {
 }
 
 export function integration(config: Config): void {
-	new GtagClient(config.maxWaitTime, config.includeCidEid);
+	new GtagAdapter(config.maxWaitTime, config.includeCidEid);
 }

@@ -1,4 +1,4 @@
-import { GAClient } from './client';
+import { GaAdapter } from './adapter';
 
 export interface Config {
 	trackingId: string;
@@ -8,5 +8,5 @@ export interface Config {
 }
 
 export function integration(config: Config): void {
-	new GAClient(config.trackingId, config.namespace, config.maxWaitTime);
+	new GaAdapter(config.trackingId, config.namespace, config.maxWaitTime);
 }

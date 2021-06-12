@@ -1,6 +1,6 @@
 {
-  "name": "@evolv-integrations/base-client",
-  "version": "0.0.2-alpha.0",
+  "name": "@evolv-integrations/analytics-adapter",
+  "version": "0.1.0",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -20,7 +20,12 @@
   "publishConfig": {
     "access": "public"
   },
+  "files": [
+    "dist"
+  ],
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^19.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.0",
     "del-cli": "^3.0.1",
     "rollup": "^2.47.0",
     "rollup-plugin-terser": "^7.0.2",

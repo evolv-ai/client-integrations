@@ -4,7 +4,7 @@ interface ActiveCandidateEvents {
 	contaminated: Record<string, any>;
 }
 
-export abstract class Client {
+export abstract class BaseAdapter {
 	protected queue: any[] = [];
 	protected interval: number = 50;
 	protected activeCandidateEvents: ActiveCandidateEvents = {

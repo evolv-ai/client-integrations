@@ -2,9 +2,10 @@
 	"extends": "../../../tsconfig-base.json",
 	"compilerOptions": {
 		"declaration": true,
-		"sourceMap": true
+		"sourceMap": true,
+		"rootDir": "src"
 	},
 	"references": [
-		{ "path": "../../base-client" }
+		{ "path": "../../analytics-adapter" }
 	]
 }

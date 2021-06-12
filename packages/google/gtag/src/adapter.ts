@@ -1,6 +1,6 @@
-import { Client } from '@evolv-integrations/base-client';
+import { BaseAdapter } from '@evolv-integrations/analytics-adapter';
 
-export class GtagClient extends Client {
+export class GtagAdapter extends BaseAdapter {
 	constructor(
 		public readonly maxWaitTime = 5000,
 		public readonly includeCidEid = false
