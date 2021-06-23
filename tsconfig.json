@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"target": "es6",
+		"baseUrl": ".",
+		"experimentalDecorators": true
+	},
+	"references": [
+		{ "path": "./packages/analytics-adapter/src"},
+		{ "path": "./packages/google/gtag/src" },
+		{ "path": "./packages/google/ga/src" }
+	]
+}

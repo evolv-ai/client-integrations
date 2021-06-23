@@ -1,0 +1,13 @@
+{
+  "packages": [
+    "packages/*",
+    "packages/google/*"
+  ],
+  "version": "independent",
+  "command": {
+    "version": {
+      "allowBranch": ["master"],
+      "message": "chore(release): publish"
+    }
+  }
+}

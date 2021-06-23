@@ -1,0 +1,25 @@
+{
+  "name": "@evolv-integrations/monorepo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "lerna run test",
+    "bootstrap": "lerna bootstrap",
+    "build": "lerna run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evolv-ai/client-integrations.git"
+  },
+  "author": "Evolv [support@evolv.ai]",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/evolv-ai/client-integrations/issues"
+  },
+  "homepage": "https://github.com/evolv-ai/client-integrations#readme",
+  "devDependencies": {
+    "lerna": "^4.0.0",
+    "typescript": "^4.2.4"
+  }
+}
