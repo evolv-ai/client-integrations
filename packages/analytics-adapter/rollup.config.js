@@ -22,7 +22,7 @@ const configFactory = (module) => {
 				tsconfig: 'tsconfig.json',
 				tsconfigOverride: {
 					compilerOptions: {
-						target: module ? 'esnext' : 'es5',
+						target: module ? 'es2020' : 'es5',
 						lib
 					}
 				}
