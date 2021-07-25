@@ -1,7 +1,8 @@
 {
   "packages": [
     "packages/*",
-    "packages/google/*"
+    "packages/google/*",
+    "packages/adobe/*"
   ],
   "version": "independent",
   "command": {
