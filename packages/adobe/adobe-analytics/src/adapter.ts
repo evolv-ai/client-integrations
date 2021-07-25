@@ -46,13 +46,13 @@ export class AaAdapter extends BaseAdapter {
     }
 
     sendMetrics(type: string, event: any) {
-        var augmentedSid = this.getAugmentedSid();
-        var augmentedUid = this.getAugmentedUid(event);
+        let augmentedSid = this.getAugmentedSid();
+        let augmentedUid = this.getAugmentedUid(event);
         let augmentedCidEid = this.getAugmentedCidEid(event);
         let augmentedGroupId = this.getAugmentedGroupId(event);
         let augmentedOrdinal = this.getAugmentedOrdinal(event);
 
-        var y: any = {};
+        let y: any = {};
 
         y.linkTrackVars = Object.values(this.dimensions).map((value: DimensionsValue | undefined) => {
             return value && this.getDimensionForAdobe(value);
