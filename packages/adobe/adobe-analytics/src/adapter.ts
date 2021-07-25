@@ -38,10 +38,7 @@ export class AaAdapter extends BaseAdapter {
     }
 
     checkAnalyticsProviders() {
-        // @ts-ignore
-        if (window.google_tag_manager || window.gtag) {
-            console.log('Evolv: Analytics integration detected Google Tag Manager - please use \'Evolv.GtagClient()\'');
-        }
+       // No check requirements
     }
 
     getDimensionForAdobe(dimension: DimensionsValue) {
