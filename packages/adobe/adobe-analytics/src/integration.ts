@@ -11,5 +11,6 @@ export interface Config {
 }
 
 export function integration(config: Config): void {
+    // NOSONAR
 	new AaAdapter(config.dimensions, config.maxWaitTime, config.customEventHandler);
 }
