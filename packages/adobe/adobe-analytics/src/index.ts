@@ -1,2 +1,2 @@
 export { AaAdapter } from './adapter';
-export { integration } from './integration';
+export { integration, integration as default } from './integration';
