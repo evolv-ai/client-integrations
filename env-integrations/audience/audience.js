@@ -19,7 +19,6 @@ var adapters = {
         try{
           token = token.slice(0,-2);
           var fnc = result[token]
-          console.info('function', typeof fnc, fnc)
           if (typeof fnc === 'function')
             result = fnc.apply(result, []);
           else
@@ -27,6 +26,10 @@ var adapters = {
         }
         catch{}
       } else {
+        if (!result[token] && tokens.length > 0){ //try flattened object index
+          token = token + '.' + tokens[0]
+          tokens = tokens.slice(1);
+        }
         result = result[token];
       }
     }
