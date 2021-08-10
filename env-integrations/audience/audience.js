@@ -219,20 +219,4 @@ function setAudience(json){
 
 audience.config = initConfig();
 
-//module.exports = setAudience;
-
-//test data
-setAudience({
-  "project": {
-    "promotype": {
-      "page": "sales/digital/expressCheckout.html",
-      "type": "fetch",
-      "value": {
-        "method": "POST",
-        "url": "https://www.verizon.com/soe/digital/auth/orderprocessservice/checkoutapi/get-checkout-details",
-        "expression": "cart.lineDetails.lineInfo.@map(promoType)",
-        "bindTo": "window.evolv.promoType"
-      }
-    }
-  }
-})
+module.exports = setAudience;
