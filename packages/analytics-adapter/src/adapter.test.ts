@@ -16,6 +16,18 @@ class ExampleAdapter extends BaseAdapter {
     }
 }
 
+const firstCid = {
+    "cid": "cid1:eid1",
+    "eid": "eid1",
+    "uid": "user1",
+};
+
+const secondCid = {
+    "cid": "cid2:eid2",
+    "eid": "eid2",
+    "uid": "user1",
+};
+
 describe('Adapter Test', () => {
     beforeEach(() => {
         delete window['evolv'];
@@ -105,11 +117,7 @@ describe('Adapter Test', () => {
                                     uid: 'user1',
                                     cid: 'cid1:eid1:extra:extra2',
                                     eid: 'eid1'
-                                }, {
-                                    uid: 'user1',
-                                    cid: 'cid2:eid2',
-                                    eid: 'eid2'
-                                }]
+                                }, secondCid]
                             }
                         } else if (key === 'experiments.confirmations') {
                             return [{
@@ -145,15 +153,7 @@ describe('Adapter Test', () => {
                     get: function (key: string) {
                         if (key === 'experiments') {
                             return {
-                                allocations: [{
-                                    uid: 'user1',
-                                    cid: 'cid1:eid1',
-                                    eid: 'eid1'
-                                }, {
-                                    uid: 'user1',
-                                    cid: 'cid2:eid2',
-                                    eid: 'eid2'
-                                }]
+                                allocations: [firstCid, secondCid]
                             }
                         } else if (key === 'experiments.confirmations') {
                             return [{
@@ -174,16 +174,8 @@ describe('Adapter Test', () => {
 
             expect(analytics.mock.calls.length).toBe(2);
 
-            expect(analytics.mock.calls[0]).toEqual( [["confirmed", {
-                "cid": "cid1:eid1",
-                "eid": "eid1",
-                "uid": "user1"
-            }]]);
-            expect(analytics.mock.calls[1]).toEqual( [["confirmed", {
-                "cid": "cid2:eid2",
-                "eid": "eid2",
-                "uid": "user1"
-            }]]);
+            expect(analytics.mock.calls[0]).toEqual( [["confirmed", firstCid]]);
+            expect(analytics.mock.calls[1]).toEqual( [["confirmed", secondCid]]);
         });
     });
 
@@ -197,15 +189,7 @@ describe('Adapter Test', () => {
                     get: function (key: string) {
                         if (key === 'experiments') {
                             return {
-                                allocations: [{
-                                    uid: 'user1',
-                                    cid: 'cid1:eid1',
-                                    eid: 'eid1'
-                                }, {
-                                    uid: 'user1',
-                                    cid: 'cid2:eid2',
-                                    eid: 'eid2'
-                                }]
+                                allocations: [firstCid, secondCid]
                             }
                         } else if (key === 'experiments.confirmations') {
                             return [{
@@ -227,11 +211,7 @@ describe('Adapter Test', () => {
 
             setTimeout(() => {
                 expect(analytics.mock.calls.length).toBe(1);
-                expect(analytics.mock.calls[0]).toEqual( [['confirmed', {
-                    "cid": "cid1:eid1",
-                    "eid": "eid1",
-                    "uid": "user1",
-                }]]);
+                expect(analytics.mock.calls[0]).toEqual( [['confirmed', firstCid]]);
                 done();
             }, client.interval*2);
         });
@@ -245,15 +225,7 @@ describe('Adapter Test', () => {
                     get: function (key: string) {
                         if (key === 'experiments') {
                             return {
-                                allocations: [{
-                                    uid: 'user1',
-                                    cid: 'cid1:eid1',
-                                    eid: 'eid1'
-                                }, {
-                                    uid: 'user1',
-                                    cid: 'cid2:eid2',
-                                    eid: 'eid2'
-                                }]
+                                allocations: [firstCid, secondCid]
                             }
                         } else if (key === 'experiments.contaminations') {
                             return [{
@@ -277,16 +249,9 @@ describe('Adapter Test', () => {
 
             setTimeout(() => {
                 expect(analytics.mock.calls.length).toBe(2);
-                expect(analytics.mock.calls[0]).toEqual( [["contaminated", {
-                    "cid": "cid1:eid1",
-                    "eid": "eid1",
-                    "uid": "user1",
-                }]]);
-                expect(analytics.mock.calls[1]).toEqual( [["contaminated", {
-                    "cid": "cid2:eid2",
-                    "eid": "eid2",
-                    "uid": "user1",
-                }]]);
+
+                expect(analytics.mock.calls[0]).toEqual( [["contaminated", firstCid]]);
+                expect(analytics.mock.calls[1]).toEqual( [["contaminated", secondCid]]);
                 done();
             },client.interval*2);
         });
@@ -300,15 +265,7 @@ describe('Adapter Test', () => {
                     get: function (key: string) {
                         if (key === 'experiments') {
                             return {
-                                allocations: [{
-                                    uid: 'user1',
-                                    cid: 'cid1:eid1',
-                                    eid: 'eid1'
-                                }, {
-                                    uid: 'user1',
-                                    cid: 'cid2:eid2',
-                                    eid: 'eid2'
-                                }]
+                                allocations: [firstCid, secondCid]
                             }
                         } else if (key === 'experiments.contaminations') {
                             return [{
@@ -417,29 +374,13 @@ describe('Adapter Test', () => {
 
             expect(analytics.mock.calls.length).toBe(4);
 
-            expect(analytics.mock.calls[0]).toEqual( [["confirmed", {
-                "cid": "cid1:eid1",
-                "eid": "eid1",
-                "uid": "user1",
-            }]]);
+            expect(analytics.mock.calls[0]).toEqual( [["confirmed", firstCid]]);
 
-            expect(analytics.mock.calls[1]).toEqual( [["contaminated", {
-                "cid": "cid1:eid1",
-                "eid": "eid1",
-                "uid": "user1",
-            }]]);
+            expect(analytics.mock.calls[1]).toEqual( [["contaminated", firstCid]]);
 
-            expect(analytics.mock.calls[2]).toEqual( [["confirmed", {
-                "cid": "cid2:eid2",
-                "eid": "eid2",
-                "uid": "user1",
-            }]]);
+            expect(analytics.mock.calls[2]).toEqual( [["confirmed", secondCid]]);
 
-            expect(analytics.mock.calls[3]).toEqual( [["contaminated", {
-                "cid": "cid2:eid2",
-                "eid": "eid2",
-                "uid": "user1",
-            }]]);
+            expect(analytics.mock.calls[3]).toEqual( [["contaminated", secondCid]]);
         });
     });
 
