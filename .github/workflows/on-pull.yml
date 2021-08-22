@@ -19,5 +19,7 @@ jobs:
         # ref is not set as it should be using master only
       - name: Run Tests
         working-directory: ./packages/analytics-adapter/
-        run: npm run test
+        run: |
+          npm install
+          npm run test
 
