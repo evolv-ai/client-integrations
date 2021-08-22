@@ -9,7 +9,6 @@ export class AaAdapter extends BaseAdapter {
     ) {
         super(maxWaitTime);
 
-        this.validateDimension('session');
         this.validateDimension('user');
         this.validateDimension('candidate');
         this.validateDimension('group');
@@ -46,7 +45,6 @@ export class AaAdapter extends BaseAdapter {
     }
 
     sendMetrics(type: string, event: any) {
-        let augmentedSid = this.getAugmentedSid();
         let augmentedUid = this.getAugmentedUid(event);
         let augmentedCidEid = this.getAugmentedCidEid(event);
         let augmentedGroupId = this.getAugmentedGroupId(event);
@@ -64,10 +62,6 @@ export class AaAdapter extends BaseAdapter {
 
         if (this.dimensions.user) {
             y[this.getDimensionForAdobe(this.dimensions.user)] = augmentedUid;
-        }
-
-        if (this.dimensions.session) {
-            y[this.getDimensionForAdobe(this.dimensions.session)] = augmentedSid;
         }
 
         if (this.dimensions.group) {

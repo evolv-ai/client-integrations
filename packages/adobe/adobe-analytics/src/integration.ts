@@ -1,6 +1,6 @@
 import { AaAdapter } from './adapter';
 
-export type Dimensions = "session" | "user" | "candidate" | "group" | "ordinal"
+export type Dimensions =  "user" | "candidate" | "group" | "ordinal"
 export type DimensionsValue = { key: string, type?: string };
 export type DimensionsMap = { [dimension in Dimensions]?: DimensionsValue};
 

@@ -3,9 +3,9 @@ import nodeResolve from '@rollup/plugin-node-resolve';
 import typescript from 'rollup-plugin-typescript2';
 
 
-const configFactory = (module) => {
-	const format = (module) ? 'esm' : 'cjs';
-	const ext = (module) ? 'mjs' : 'js';
+const configFactory = (module, iife) => {
+	const format = (module) ? 'esm' : ((iife) ? 'iife' : 'cjs');
+	const ext = (module) ? 'mjs' : ((iife) ? 'browser.js' : 'js');
 
 	const lib = module
 		? ['esnext', 'dom', 'dom.iterable', 'es2020.promise']
@@ -31,12 +31,14 @@ const configFactory = (module) => {
 		],
 		output: {
 			file: `dist/index.${ext}`,
-			format
+			format,
+			name: 'AdobeAnalytics'
 		}
 	}
 };
 
 export default [
 	configFactory(true),
-	configFactory(false)
+	configFactory(false),
+	configFactory(false, true)
 ];
