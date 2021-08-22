@@ -311,21 +311,9 @@ describe('Adapter Test', () => {
                     get: function (key: string) {
                         if (key === 'experiments') {
                             return {
-                                allocations: [{
-                                    uid: 'user1',
-                                    cid: 'cid1:eid1',
-                                    eid: 'eid1'
-                                }, {
-                                    uid: 'user1',
-                                    cid: 'cid2:eid2',
-                                    eid: 'eid2'
-                                }]
+                                allocations: [firstCid, secondCid]
                             }
-                        } else if (key === 'experiments.confirmations') {
-                            return [{
-                                cid: 'cid1:eid1'
-                            }]
-                        } else if (key === 'experiments.contaminations') {
+                        } else if (key === 'experiments.confirmations' || key === 'experiments.contaminations') {
                             return [{
                                 cid: 'cid1:eid1'
                             }]
@@ -344,23 +332,9 @@ describe('Adapter Test', () => {
             window['evolv'].context.get = (key: string) => {
                 if (key === 'experiments') {
                     return {
-                        allocations: [{
-                            uid: 'user1',
-                            cid: 'cid1:eid1',
-                            eid: 'eid1'
-                        }, {
-                            uid: 'user1',
-                            cid: 'cid2:eid2',
-                            eid: 'eid2'
-                        }]
+                        allocations: [firstCid, secondCid]
                     }
-                } else if (key === 'experiments.confirmations') {
-                    return [{
-                        cid: 'cid1:eid1'
-                    }, {
-                        cid: 'cid2:eid2'
-                    }]
-                } else if (key === 'experiments.contaminations') {
+                } else if (key === 'experiments.confirmations' || key === 'experiments.contaminations') {
                     return [{
                         cid: 'cid1:eid1'
                     }, {
