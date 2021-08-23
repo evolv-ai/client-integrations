@@ -1,9 +1,9 @@
-name: Run Tests and Linting
+name: Run Tests
 
 on:
-  pull_request:
-    branches:
-      - master
+  push:
+    paths:
+      - 'packages/analytics-adapter/**'
 
 jobs:
   deploy:
