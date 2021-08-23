@@ -6,7 +6,7 @@ interface ActiveCandidateEvents {
 
 export abstract class BaseAdapter {
 	protected queue: any[] = [];
-	protected interval: number = 50;
+	public interval: number = 50;
 	protected activeCandidateEvents: ActiveCandidateEvents = {
 		confirmed: {},
 		contaminated: {}

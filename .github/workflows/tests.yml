@@ -1,0 +1,25 @@
+name: Run Tests
+
+on:
+  push:
+    paths:
+      - 'packages/analytics-adapter/**'
+
+jobs:
+  deploy:
+    name: Run Adapter Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14'
+      - name: Checkout Ref
+        uses: actions/checkout@v1
+        # ref is not set as it should be using master only
+      - name: Run Tests
+        working-directory: ./packages/analytics-adapter/
+        run: |
+          npm install
+          npm run test
+
