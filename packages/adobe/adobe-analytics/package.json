@@ -1,6 +1,6 @@
 {
   "name": "@evolv-integrations/adobe-analytics",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Evolv integration code for Adobe Analytics",
   "private": false,
   "main": "dist/index.js",
