@@ -48,7 +48,7 @@ export abstract class BaseAdapter extends Awaiter {
 	}
 
 	sendMetricsForActiveCandidates(type: keyof ActiveCandidateEvents) {
-		let contextKey = this.getContextKey(type);
+		let contextKey = BaseAdapter.getContextKey(type);
 		let candidates = this.getEvolv().context.get(contextKey) || [];
 		for (let i = 0; i < candidates.length; i++) {
 			if (this.activeCandidateEvents[type] && !this.activeCandidateEvents[type][candidates?.[i]?.cid]) {
@@ -70,7 +70,7 @@ export abstract class BaseAdapter extends Awaiter {
 		}
 	}
 
-	private getContextKey(type: string) {
+	private static getContextKey(type: string) {
 		switch (type) {
 			case 'confirmed':
 				return 'experiments.confirmations';
