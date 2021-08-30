@@ -1,10 +1,11 @@
+import {Awaiter} from "./awaiter";
 
 interface ActiveCandidateEvents {
 	confirmed: Record<string, any>;
 	contaminated: Record<string, any>;
 }
 
-export abstract class BaseAdapter {
+export abstract class BaseAdapter extends Awaiter {
 	protected queue: any[] = [];
 	public interval: number = 50;
 	protected activeCandidateEvents: ActiveCandidateEvents = {
@@ -14,8 +15,22 @@ export abstract class BaseAdapter {
 	protected contaminations: any = {};
 
 	constructor(public readonly maxWaitTime = 5000) {
+		super(maxWaitTime);
+
 		this.waitForAnalytics();
-		this.waitForEvolv(this.configureListeners.bind(this));
+		this.waitForEvolv();
+	}
+
+	onAnalyticsFound(analytics: any) {
+		let args;
+		while (this.queue.length) {
+			args = this.queue.shift();
+			analytics(...args);
+		}
+	}
+
+	onEvolvFound() {
+		this.configureListeners();
 	}
 
 	private configureListeners() {
@@ -64,72 +79,6 @@ export abstract class BaseAdapter {
 			default:
 				return '';
 		}
-	}
-
-	getEvolv() {
-		return window.evolv;
-	}
-
-	abstract getAnalytics(): any;
-	abstract checkAnalyticsProviders(): void;
-
-	// Override for customer analytics processor
-	getHandler(): any {
-		return this.getAnalytics();
-	}
-
-	waitForEvolv(functionWhenReady: Function) {
-		if (this.getEvolv()) {
-			functionWhenReady && functionWhenReady();
-			return;
-		}
-
-		const begin = Date.now();
-		const intervalId = setInterval(() => {
-			if ((Date.now() - begin) > this.maxWaitTime) {
-				clearInterval(intervalId);
-				console.log('Evolv: Analytics integration timed out - couldn\'t find Evolv');
-				return;
-			}
-
-			const evolv = this.getEvolv();
-			if (!evolv) {
-				return;
-			}
-
-			functionWhenReady && functionWhenReady();
-
-			clearInterval(intervalId);
-		}, this.interval);
-	}
-
-	waitForAnalytics() {
-		if (this.getAnalytics()) {
-			return;
-		}
-
-		const begin = Date.now();
-		const intervalId = setInterval(() => {
-			if ((Date.now() - begin) > this.maxWaitTime) {
-				clearInterval(intervalId);
-				console.log('Evolv: Analytics integration timed out - Couldn\'t find Analytics');
-				this.checkAnalyticsProviders();
-				return;
-			}
-
-			const analytics = this.getHandler();
-			if (!analytics) {
-				return;
-			}
-
-			let args;
-			while (this.queue.length) {
-				args = this.queue.shift();
-				analytics(...args);
-			}
-
-			clearInterval(intervalId);
-		}, this.interval);
 	}
 
 	getAugmentedOrdinal(event: any) {
