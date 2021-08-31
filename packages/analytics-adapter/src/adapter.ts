@@ -22,9 +22,8 @@ export abstract class BaseAdapter extends Awaiter {
 	}
 
 	onAnalyticsFound(analytics: any) {
-		let args;
 		while (this.queue.length) {
-			args = this.queue.shift();
+			const args = this.queue.shift();
 			analytics(...args);
 		}
 	}
