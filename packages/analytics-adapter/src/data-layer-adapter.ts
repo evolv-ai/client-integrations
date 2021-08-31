@@ -2,7 +2,7 @@ import {Awaiter} from "./awaiter";
 
 export abstract class DataLayerAdapter extends Awaiter {
     evolvReady = false;
-    dataToApplyWhenEvolvReady: {[key:string]: any}[] = [];
+    dataToApplyWhenEvolvReady: Record<string, any>[] = [];
 
     constructor(public readonly maxWaitTime = 5000) {
         super(maxWaitTime);
