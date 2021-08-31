@@ -1,4 +1,5 @@
 import {BaseAdapter} from './adapter';
+import {Analytics} from "./awaiter";
 
 let logSpy: any;
 
@@ -6,13 +7,18 @@ class ExampleAdapter extends BaseAdapter {
     checkAnalyticsProviders(): void {
     }
 
-    getAnalytics(): any {
+    getAnalytics(): Analytics {
         // @ts-ignore
         return window['example-analytics']
     }
 
     sendMetrics(type: string, event: any): void {
         this.emit([type, event])
+    }
+
+    getHandler(): (...args: any) => void {
+        // @ts-ignore
+        return this.getAnalytics()['handler'];
     }
 }
 
@@ -60,7 +66,9 @@ describe('Adapter Test', () => {
 
     describe('Ensure listeners set up', () => {
         test('Validate on listener configured when evolv ready before constructor', () => {
-            let analytics = jest.fn();
+            let analytics = {
+                handler: jest.fn()
+            };
             let on = jest.fn();
             window['evolv'] = {
                 client: {
@@ -78,7 +86,9 @@ describe('Adapter Test', () => {
         });
 
         test('Validate on listener configured when evolv ready after constructor', (done) => {
-            let analytics = jest.fn();
+            let analytics = {
+                handler: jest.fn()
+            };
             let on = jest.fn();
             // @ts-ignore
             window['example-analytics'] = analytics;
@@ -103,7 +113,9 @@ describe('Adapter Test', () => {
 
     describe('If Analytics already loaded', () => {
         test('Validate emitted events fire for a single experiment', () => {
-            let analytics = jest.fn();
+            let analytics = {
+                handler: jest.fn()
+            };
             let on = jest.fn();
             // @ts-ignore
             window['example-analytics'] = analytics;
@@ -134,8 +146,8 @@ describe('Adapter Test', () => {
             const client = new ExampleAdapter();
             client.sendMetricsForActiveCandidates('confirmed');
 
-            expect(analytics.mock.calls.length).toBe(1);
-            expect(analytics.mock.calls[0]).toEqual( [['confirmed', {
+            expect(analytics.handler.mock.calls.length).toBe(1);
+            expect(analytics.handler.mock.calls[0]).toEqual( [['confirmed', {
                 'cid': 'cid1:eid1:extra:extra2',
                 'eid': 'eid1',
                 'uid': 'user1'
@@ -143,7 +155,9 @@ describe('Adapter Test', () => {
         });
 
         test('Validate emitted events fire for multiple experiments', () => {
-            let analytics = jest.fn();
+            let analytics = {
+                handler: jest.fn()
+            };
             // @ts-ignore
             window['example-analytics'] = analytics;
             let on = jest.fn();
@@ -172,16 +186,18 @@ describe('Adapter Test', () => {
             const client = new ExampleAdapter();
             client.sendMetricsForActiveCandidates('confirmed');
 
-            expect(analytics.mock.calls.length).toBe(2);
+            expect(analytics.handler.mock.calls.length).toBe(2);
 
-            expect(analytics.mock.calls[0]).toEqual( [['confirmed', firstCid]]);
-            expect(analytics.mock.calls[1]).toEqual( [['confirmed', secondCid]]);
+            expect(analytics.handler.mock.calls[0]).toEqual( [['confirmed', firstCid]]);
+            expect(analytics.handler.mock.calls[1]).toEqual( [['confirmed', secondCid]]);
         });
     });
 
     describe('If Analytics loads after events', () => {
         test('Validate emitted events fire for a single experiment', done => {
-            let analytics = jest.fn();
+            let analytics = {
+                handler: jest.fn()
+            };
             let on = jest.fn();
             window['evolv'] = {
                 context: {
@@ -210,14 +226,16 @@ describe('Adapter Test', () => {
             window['example-analytics'] = analytics;
 
             setTimeout(() => {
-                expect(analytics.mock.calls.length).toBe(1);
-                expect(analytics.mock.calls[0]).toEqual( [['confirmed', firstCid]]);
+                expect(analytics.handler.mock.calls.length).toBe(1);
+                expect(analytics.handler.mock.calls[0]).toEqual( [['confirmed', firstCid]]);
                 done();
             }, client.interval*2);
         });
 
         test('Validate emitted events fire for multiple experiments', done => {
-            let analytics = jest.fn();
+            let analytics = {
+                handler: jest.fn()
+            };
             let on = jest.fn();
             window['evolv'] = {
                 context: {
@@ -248,16 +266,18 @@ describe('Adapter Test', () => {
             window['example-analytics'] = analytics;
 
             setTimeout(() => {
-                expect(analytics.mock.calls.length).toBe(2);
+                expect(analytics.handler.mock.calls.length).toBe(2);
 
-                expect(analytics.mock.calls[0]).toEqual( [['contaminated', firstCid]]);
-                expect(analytics.mock.calls[1]).toEqual( [['contaminated', secondCid]]);
+                expect(analytics.handler.mock.calls[0]).toEqual( [['contaminated', firstCid]]);
+                expect(analytics.handler.mock.calls[1]).toEqual( [['contaminated', secondCid]]);
                 done();
             },client.interval*2);
         });
 
         test('Validate emitted non-experiment events fire once', done => {
-            let analytics = jest.fn();
+            let analytics = {
+                handler: jest.fn()
+            };
             let on = jest.fn();
             window['evolv'] = {
                 context: {
@@ -290,8 +310,8 @@ describe('Adapter Test', () => {
             window['example-analytics'] = analytics;
 
             setTimeout(() => {
-                expect(analytics.mock.calls.length).toBe(1);
-                expect(analytics.mock.calls[0]).toEqual( [['custom-event', {
+                expect(analytics.handler.mock.calls.length).toBe(1);
+                expect(analytics.handler.mock.calls[0]).toEqual( [['custom-event', {
                     'uid': 'user1',
                 }]]);
                 done();
@@ -301,7 +321,9 @@ describe('Adapter Test', () => {
 
     describe('Ensure contaminations and confirmations only firing once per experiment', () => {
         test('Validate emitted events fire for multiple experiments', () => {
-            let analytics = jest.fn();
+            let analytics = {
+                handler: jest.fn()
+            };
             // @ts-ignore
             window['example-analytics'] = analytics;
             let on = jest.fn();
@@ -346,15 +368,15 @@ describe('Adapter Test', () => {
             client.sendMetricsForActiveCandidates('confirmed');
             client.sendMetricsForActiveCandidates('contaminated');
 
-            expect(analytics.mock.calls.length).toBe(4);
+            expect(analytics.handler.mock.calls.length).toBe(4);
 
-            expect(analytics.mock.calls[0]).toEqual( [['confirmed', firstCid]]);
+            expect(analytics.handler.mock.calls[0]).toEqual( [['confirmed', firstCid]]);
 
-            expect(analytics.mock.calls[1]).toEqual( [['contaminated', firstCid]]);
+            expect(analytics.handler.mock.calls[1]).toEqual( [['contaminated', firstCid]]);
 
-            expect(analytics.mock.calls[2]).toEqual( [['confirmed', secondCid]]);
+            expect(analytics.handler.mock.calls[2]).toEqual( [['confirmed', secondCid]]);
 
-            expect(analytics.mock.calls[3]).toEqual( [['contaminated', secondCid]]);
+            expect(analytics.handler.mock.calls[3]).toEqual( [['contaminated', secondCid]]);
         });
     });
 
@@ -390,7 +412,9 @@ describe('Adapter Test', () => {
         };
 
         test('Validate emitted events fire when ordinals present',() => {
-            let analytics = jest.fn();
+            let analytics = {
+                handler: jest.fn()
+            };
             // @ts-ignore
             window['example-analytics'] = analytics;
 
@@ -405,16 +429,16 @@ describe('Adapter Test', () => {
             client.sendMetricsForActiveCandidates('confirmed');
             client.sendMetricsForActiveCandidates('contaminated');
 
-            expect(analytics.mock.calls.length).toBe(2);
+            expect(analytics.handler.mock.calls.length).toBe(2);
 
-            expect(analytics.mock.calls[0]).toEqual( [['contaminated', {
+            expect(analytics.handler.mock.calls[0]).toEqual( [['contaminated', {
                 'cid': 'cid1:eid1',
                 'eid': 'eid1',
                 'group_id': 'group1',
                 'ordinal': 1,
                 'uid': 'user1',
             }]]);
-            expect(analytics.mock.calls[1]).toEqual( [['contaminated', {
+            expect(analytics.handler.mock.calls[1]).toEqual( [['contaminated', {
                 'cid': 'cid2:eid2',
                 'eid': 'eid2',
                 'group_id': 'group2',

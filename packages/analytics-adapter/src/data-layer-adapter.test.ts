@@ -1,4 +1,5 @@
 import {DataLayerAdapter} from "./data-layer-adapter";
+import {Analytics} from "./awaiter";
 
 const synchronousContext = {
     example: {
@@ -28,7 +29,7 @@ const asynchronousContext2 = {
 };
 
 const interval1Multiplier = 3;
-const interval2Multiplier = 6;
+const interval2Multiplier = 2 * interval1Multiplier;
 
 class ExampleDataLayerAdapter extends DataLayerAdapter {
     addListenersForContextData(): void {
@@ -49,7 +50,7 @@ class ExampleDataLayerAdapter extends DataLayerAdapter {
     checkAnalyticsProviders(): void {
     }
 
-    getAnalytics(): any {
+    getAnalytics(): Analytics {
         // @ts-ignore
         return window['example-analytics']
     }
@@ -84,6 +85,10 @@ describe('Data Layer Adapter Test', () => {
     });
 
     afterEach(() => {
+    });
+
+    test('Ensure first interval to be less than the second', () => {
+        expect(interval1Multiplier).toBeLessThan(interval2Multiplier)
     });
 
     describe('If Analytics and Evolv already loaded', () => {

@@ -1,3 +1,5 @@
+export type AnalyticsHandler<T extends Array<any> = any[]> = (...args: T) => void;
+export type Analytics = object;
 
 export abstract class Awaiter {
     public interval: number = 50;
@@ -10,21 +12,15 @@ export abstract class Awaiter {
         */
     }
 
-    abstract getAnalytics(): any;
+    abstract getAnalytics(): Analytics;
     abstract checkAnalyticsProviders(): void; // Optional check for incorrect configuration
 
-    abstract onAnalyticsFound(analytics: any): void;
+    abstract onAnalyticsFound(): void;
     abstract onEvolvFound(): void;
 
-    // Override for customer analytics processor
-    getHandler(): any {
-        return this.getAnalytics();
-    }
-
     waitForAnalytics() {
-        let analytics = this.getHandler();
-        if (analytics) {
-            this.onAnalyticsFound(analytics);
+        if (this.getAnalytics()) {
+            this.onAnalyticsFound();
             return;
         }
 
@@ -37,12 +33,11 @@ export abstract class Awaiter {
                 return;
             }
 
-            analytics = this.getHandler();
-            if (!analytics) {
+            if (!this.getAnalytics()) {
                 return;
             }
 
-            this.onAnalyticsFound(analytics);
+            this.onAnalyticsFound();
 
             clearInterval(intervalId);
         }, this.interval);

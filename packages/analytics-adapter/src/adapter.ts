@@ -1,4 +1,4 @@
-import {Awaiter} from "./awaiter";
+import {AnalyticsHandler, Awaiter} from "./awaiter";
 
 interface ActiveCandidateEvents {
 	confirmed: Record<string, any>;
@@ -21,10 +21,11 @@ export abstract class BaseAdapter extends Awaiter {
 		this.waitForEvolv();
 	}
 
-	onAnalyticsFound(analytics: any) {
+	onAnalyticsFound() {
+		const handler = this.getHandler();
 		while (this.queue.length) {
 			const args = this.queue.shift();
-			analytics(...args);
+			handler(...args);
 		}
 	}
 
@@ -131,11 +132,12 @@ export abstract class BaseAdapter extends Awaiter {
 	protected emit(...args: any[]) {
 		const analytics = this.getAnalytics();
 		if (analytics) {
-			analytics(...args);
+			this.getHandler()(...args);
 		} else {
 			this.queue.push(args);
 		}
 	}
 
 	abstract sendMetrics(type: string, event: any): void;
+	abstract getHandler(): AnalyticsHandler
 }

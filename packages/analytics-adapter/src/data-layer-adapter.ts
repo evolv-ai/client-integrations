@@ -11,7 +11,7 @@ export abstract class DataLayerAdapter extends Awaiter {
         this.waitForEvolv();
     }
 
-    onAnalyticsFound(analytics: any) {
+    onAnalyticsFound() {
         this.setOnContext(this.getAnalyticsContextData());
         this.addListenersForContextData();
     };
