@@ -5,7 +5,7 @@ interface ActiveCandidateEvents {
 	contaminated: Record<string, any>;
 }
 
-export abstract class BaseAdapter extends Awaiter {
+export abstract class AnalyticsNotifierAdapter extends Awaiter {
 	protected queue: any[] = [];
 	public interval: number = 50;
 	protected activeCandidateEvents: ActiveCandidateEvents = {
@@ -48,7 +48,7 @@ export abstract class BaseAdapter extends Awaiter {
 	}
 
 	sendMetricsForActiveCandidates(type: keyof ActiveCandidateEvents) {
-		let contextKey = BaseAdapter.getContextKey(type);
+		let contextKey = AnalyticsNotifierAdapter.getContextKey(type);
 		let candidates = this.getEvolv().context.get(contextKey) || [];
 		for (let i = 0; i < candidates.length; i++) {
 			if (this.activeCandidateEvents[type] && !this.activeCandidateEvents[type][candidates?.[i]?.cid]) {
