@@ -1,9 +1,9 @@
-import {BaseAdapter} from './adapter';
+import {AnalyticsNotifierAdapter} from './notifier-adapter';
 import {Analytics} from "./awaiter";
 
 let logSpy: any;
 
-class ExampleAdapter extends BaseAdapter {
+class ExampleAdapter extends AnalyticsNotifierAdapter {
     checkAnalyticsProviders(): void {
     }
 
