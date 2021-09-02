@@ -1,6 +1,6 @@
-import { BaseAdapter } from '@evolv-integrations/analytics-adapter';
+import { AnalyticsNotifierAdapter } from '@evolv-integrations/analytics-adapter';
 
-export class GaAdapter extends BaseAdapter {
+export class GaAdapter extends AnalyticsNotifierAdapter {
     constructor(
         public readonly trackingId: string,
         public readonly namespace: string,
@@ -13,6 +13,10 @@ export class GaAdapter extends BaseAdapter {
     getAnalytics() {
         // @ts-ignore
         return (window.GoogleAnalyticsObject && window[window.GoogleAnalyticsObject]) || window.ga;
+    }
+
+    getHandler() {
+        return this.getAnalytics();
     }
 
     checkAnalyticsProviders() {
