@@ -1,6 +1,6 @@
-import { BaseAdapter } from '@evolv-integrations/analytics-adapter';
+import { AnalyticsNotifierAdapter } from '@evolv-integrations/analytics-adapter';
 
-export class GtagAdapter extends BaseAdapter {
+export class GtagAdapter extends AnalyticsNotifierAdapter {
 	constructor(
 		public readonly maxWaitTime = 5000,
 		public readonly includeCidEid = false
@@ -10,6 +10,10 @@ export class GtagAdapter extends BaseAdapter {
 
 	getAnalytics() {
 		return window.gtag;
+	}
+
+	getHandler() {
+		return this.getAnalytics();
 	}
 
 	checkAnalyticsProviders() {

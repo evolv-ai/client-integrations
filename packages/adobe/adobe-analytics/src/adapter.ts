@@ -1,11 +1,10 @@
-import { BaseAdapter } from '@evolv-integrations/analytics-adapter';
+import { AnalyticsNotifierAdapter } from '@evolv-integrations/analytics-adapter';
 import {Dimensions, DimensionsMap, DimensionsValue} from "./integration";
 
-export class AaAdapter extends BaseAdapter {
+export class AaAdapter extends AnalyticsNotifierAdapter {
     constructor(
         public readonly dimensions: DimensionsMap,
-        public readonly maxWaitTime = 5000,
-        public readonly customEventHandler?: () => {}
+        public readonly maxWaitTime = 5000
     ) {
         super(maxWaitTime);
 
@@ -29,11 +28,12 @@ export class AaAdapter extends BaseAdapter {
 
     getAnalytics() {
         // @ts-ignore
-        return (window.s && window.s.tl);
+        return window.s;
     }
 
     getHandler() {
-        return this.customEventHandler || this.getAnalytics();
+        // @ts-ignore
+        return this.getAnalytics().tl;
     }
 
     checkAnalyticsProviders() {

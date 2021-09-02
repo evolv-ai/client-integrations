@@ -7,9 +7,8 @@ export type DimensionsMap = { [dimension in Dimensions]?: DimensionsValue};
 export interface Config {
 	dimensions: DimensionsMap;
 	maxWaitTime?: number;
-	customEventHandler?: () => {};
 }
 
 export function integration(config: Config): void {
-	new AaAdapter(config.dimensions, config.maxWaitTime, config.customEventHandler);
+	new AaAdapter(config.dimensions, config.maxWaitTime);
 }
