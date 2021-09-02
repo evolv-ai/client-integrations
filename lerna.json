@@ -2,7 +2,8 @@
   "packages": [
     "packages/*",
     "packages/google/*",
-    "packages/adobe/*"
+    "packages/adobe/*",
+    "packages/quantum-metric/*"
   ],
   "version": "independent",
   "command": {
