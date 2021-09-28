@@ -26,8 +26,8 @@ export class QuantumDataLayerAdapter extends DataLayerAdapter {
             '-22': 'longRunningSpinner'
         };
 
-        this.listenersParameters = Object.assign(defaultListenerParams, listenersParameters);
-        this.parametersToReadFromQuantum = Object.assign(defaultParametersToReadFromQuantum, parametersToReadFromQuantum)
+        this.listenersParameters = { ...defaultListenerParams, ...listenersParameters };
+        this.parametersToReadFromQuantum = { ...defaultParametersToReadFromQuantum, ...parametersToReadFromQuantum };
     }
 
     getAnalytics() {
