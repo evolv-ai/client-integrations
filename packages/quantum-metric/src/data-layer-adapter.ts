@@ -1,4 +1,4 @@
-import {DataLayerAdapter} from "@evolv-integrations/analytics-adapter";
+import { DataLayerAdapter } from '@evolv-integrations/analytics-adapter';
 
 const AVAILABLE_PARAMETERS_TO_READ = {
     GET_CART_VALUE: 'cartValue'
