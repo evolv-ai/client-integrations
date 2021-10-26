@@ -1,8 +1,9 @@
 {
   "packages": [
     "packages/*",
-    "packages/google/*",
-    "packages/adobe/*"
+    "packages/integrations/*",
+    "packages/integrations/google/*",
+    "packages/integrations/adobe/*"
   ],
   "version": "independent",
   "command": {

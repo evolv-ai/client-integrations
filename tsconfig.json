@@ -5,8 +5,8 @@
 		"experimentalDecorators": true
 	},
 	"references": [
-		{ "path": "./packages/analytics-adapter/src"},
-		{ "path": "./packages/google/gtag/src" },
-		{ "path": "./packages/google/ga/src" }
+		{ "path": "./packages/integrations/analytics-adapter/src"},
+		{ "path": "./packages/integrations/google/gtag/src" },
+		{ "path": "./packages/integrations/google/ga/src" }
 	]
 }

@@ -3,7 +3,7 @@ name: Run Tests
 on:
   push:
     paths:
-      - 'packages/analytics-adapter/**'
+      - 'packages/integrations/analytics-adapter/**'
 
 jobs:
   deploy:
@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v1
         # ref is not set as it should be using master only
       - name: Run Tests
-        working-directory: ./packages/analytics-adapter/
+        working-directory: ./packages/integrations/analytics-adapter/
         run: |
           npm install
           npm run test
