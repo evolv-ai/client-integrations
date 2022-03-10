@@ -29,7 +29,8 @@ export class QuantumNotifierAdapter extends AnalyticsNotifierAdapter {
         if (event.group_id) {
             value = Object.assign(value, {
                 groupId: event.group_id,
-                ordinal: event.ordinal
+                ordinal: event.ordinal,
+                cid: event.cid
             });
         }
 
