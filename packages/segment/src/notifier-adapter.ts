@@ -32,10 +32,6 @@ export class SegmentNotifierAdapter extends AnalyticsNotifierAdapter {
         this.emit(`Evolv Event: ${type}`, value);
     }
 
-    addSegmentEventHandler() {
-
-    }
-
     checkAnalyticsProviders(): void {
         // No check requirements
     }

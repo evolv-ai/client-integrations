@@ -49,10 +49,7 @@ describe('Event Listener Adapter Test', () => {
         delete window['example-analytics'];
     });
 
-    afterEach(() => {
-    });
-
-    xdescribe('If Analytics and Evolv already loaded', () => {
+    describe('If Analytics and Evolv already loaded', () => {
         test('Validate events are sent', (done) => {
             let emit = jest.fn();
 
@@ -67,7 +64,6 @@ describe('Event Listener Adapter Test', () => {
             setTimeout(() => {
                 expect(emit.mock.calls.length).toBe(1);
                 expect(emit.mock.calls[0]).toEqual([event1]);
-                done();
             }, client.interval * interval1Multiplier * 1.5);
 
             setTimeout(() => {
@@ -83,22 +79,6 @@ describe('Event Listener Adapter Test', () => {
             let emit = jest.fn();
             let analytics = jest.fn();
 
-            window['evolv'] = {
-                client: { emit }
-            };
-
-            const client = new ExampleEventListenerAdapter();
-
-            // @ts-ignore
-            window['example-analytics'] = analytics;
-
-            testAdapterContextUpdates(emit, client, done);
-        });
-    });
-
-    describe('If Evolv is already loaded', () => {
-        test('Validate events are sent', (done) => {
-            let emit = jest.fn();
             // @ts-ignore
             window['example-analytics'] = jest.fn();
 
@@ -114,7 +94,26 @@ describe('Event Listener Adapter Test', () => {
         });
     });
 
-    xdescribe('If neither are already loaded', () => {
+    describe('If Evolv is already loaded', () => {
+        test('Validate events are sent', (done) => {
+            let emit = jest.fn();
+
+            window['evolv'] = {
+                client: {
+                    emit
+                }
+            };
+
+            const client = new ExampleEventListenerAdapter();
+
+            // @ts-ignore
+            window['example-analytics'] = jest.fn();
+
+            testAdapterContextUpdates(emit, client, done);
+        });
+    });
+
+    describe('If neither are already loaded', () => {
         test('Validate events are sent', (done) => {
             let emit = jest.fn();
 
