@@ -1,4 +1,4 @@
-import {Awaiter} from "./awaiter";
+import { Awaiter } from "./awaiter";
 
 export abstract class EventListenerAdapter extends Awaiter {
     evolvReady = false;

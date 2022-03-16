@@ -37,7 +37,7 @@ describe('Segment Event Listener Adapter Test', () => {
                 client: { emit }
             };
 
-            new SegmentEventListenerAdapter(eventConfig);
+            const client = new SegmentEventListenerAdapter(eventConfig);
 
             window['analytics'].dispatchEvent('track', { event: event1 });
             window['analytics'].dispatchEvent('track', { event: event2 });
@@ -67,7 +67,7 @@ describe('Segment Event Listener Adapter Test', () => {
                 client: { emit }
             };
 
-            new SegmentEventListenerAdapter({});
+            const client = new SegmentEventListenerAdapter({});
 
             window['analytics'].dispatchEvent('track', { event: event1 });
             window['analytics'].dispatchEvent('track', { event: event2 });
