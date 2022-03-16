@@ -13,7 +13,7 @@ export abstract class EventListenerAdapter extends Awaiter {
 
     onAnalyticsFound() {
         this.addListenersForEventData();
-    };
+    }
 
     onEvolvFound() {
         this.evolvReady = true;
@@ -22,7 +22,7 @@ export abstract class EventListenerAdapter extends Awaiter {
             this.applyEventData(this.eventsToEmitWhenEvolvReady);
             this.eventsToEmitWhenEvolvReady = [];
         }
-    };
+    }
 
     emitEvent(event: string) {
         if (!this.evolvReady) {
