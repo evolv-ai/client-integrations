@@ -5,7 +5,7 @@
   "main": "dist/evolv-exp-acc-aa.js",
   "scripts": {
     "build": "rollup --config ./rollup.config.js",
-    "test": "jest"
+    "test": "jest --passWithNoTests"
   },
   "author": "",
   "license": "Apache-2.0",
