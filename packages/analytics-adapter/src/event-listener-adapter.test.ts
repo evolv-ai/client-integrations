@@ -1,5 +1,5 @@
-import {EventListenerAdapter} from "./event-listener-adapter";
-import {Analytics} from "./awaiter";
+import { EventListenerAdapter } from "./event-listener-adapter";
+import { Analytics } from "./awaiter";
 
 const event1 = "Test Event 1";
 const event2 = "Test Event 2";
