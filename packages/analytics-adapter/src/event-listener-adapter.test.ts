@@ -19,11 +19,12 @@ class ExampleEventListenerAdapter extends EventListenerAdapter {
     }
 
     checkAnalyticsProviders(): void {
+        // No check requirements
     }
 
     getAnalytics(): Analytics {
         // @ts-ignore
-        return window['example-analytics']
+        return window['example-analytics'];
     }
 }
 
@@ -61,23 +62,13 @@ describe('Event Listener Adapter Test', () => {
 
             const client = new ExampleEventListenerAdapter();
 
-            setTimeout(() => {
-                expect(emit.mock.calls.length).toBe(1);
-                expect(emit.mock.calls[0]).toEqual([event1]);
-            }, client.interval * interval1Multiplier * 1.5);
-
-            setTimeout(() => {
-                expect(emit.mock.calls.length).toBe(2);
-                expect(emit.mock.calls[1]).toEqual([event2]);
-                done();
-            }, client.interval * interval2Multiplier * 1.5);
+            testAdapterContextUpdates(emit, client, done);
         });
     });
 
     describe('If Analytics already loaded', () => {
         test('Validate events are sent', (done) => {
             let emit = jest.fn();
-            let analytics = jest.fn();
 
             // @ts-ignore
             window['example-analytics'] = jest.fn();
@@ -85,9 +76,7 @@ describe('Event Listener Adapter Test', () => {
             const client = new ExampleEventListenerAdapter();
 
             window['evolv'] = {
-                client: {
-                    emit
-                }
+                client: { emit }
             };
 
             testAdapterContextUpdates(emit, client, done);
@@ -99,9 +88,7 @@ describe('Event Listener Adapter Test', () => {
             let emit = jest.fn();
 
             window['evolv'] = {
-                client: {
-                    emit
-                }
+                client: { emit }
             };
 
             const client = new ExampleEventListenerAdapter();

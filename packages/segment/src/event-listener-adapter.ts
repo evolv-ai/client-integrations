@@ -1,8 +1,6 @@
 import { EventListenerAdapter } from '@evolv-integrations/analytics-adapter';
 
 export class SegmentEventListenerAdapter extends EventListenerAdapter {
-
-
     constructor(
         public parametersToReadFromSegment: Record<string, string> = {},
         public readonly maxWaitTime = 5000
