@@ -9,9 +9,9 @@ export interface Config {
 }
 
 export function integration(config: Config): void {
-    new SegmentNotifierAdapter(config.maxWaitTime);
+    const segmentNotifier = new SegmentNotifierAdapter(config.maxWaitTime);
 
     config.eventListenerAdapter = config.eventListenerAdapter || {};
     config.eventListenerAdapter.parametersToReadFromSegment = config.eventListenerAdapter.parametersToReadFromSegment || {};
-    new SegmentEventListenerAdapter(config.eventListenerAdapter.parametersToReadFromSegment, config.maxWaitTime);
+    const segmentEventListener = new SegmentEventListenerAdapter(config.eventListenerAdapter.parametersToReadFromSegment, config.maxWaitTime);
 }
