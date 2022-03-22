@@ -27,7 +27,7 @@
     "dist/**/*"
   ],
   "dependencies": {
-    "@evolv-integrations/analytics-adapter": "^2.0.0"
+    "@evolv-integrations/analytics-adapter": "^2.1.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^19.0.0",

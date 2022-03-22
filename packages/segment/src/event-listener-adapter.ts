@@ -16,12 +16,12 @@ export class SegmentEventListenerAdapter extends EventListenerAdapter {
     }
 
     addListenersForEventData(): void {
-        this.getAnalytics().addEventListener('track', (evt: any) => {
-            const { event } = evt;
-
-            if (this.parametersToReadFromSegment[event]) {
-                this.emitEvent(this.parametersToReadFromSegment[event]);
-            }
+        this.getAnalytics().ready(() => {
+            this.getAnalytics().on('track', (name: string) => {
+                if (this.parametersToReadFromSegment[name]) {
+                    this.emitEvent(this.parametersToReadFromSegment[name]);
+                }
+            });
         });
     }
 

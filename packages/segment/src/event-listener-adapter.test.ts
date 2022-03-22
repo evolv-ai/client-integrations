@@ -25,10 +25,11 @@ describe('Segment Event Listener Adapter Test', () => {
 
             // @ts-ignore
             window['analytics'] = {
-                addEventListener: jest.fn((event, cb) => {
+                ready: jest.fn(cb => cb()),
+                on: jest.fn((event, cb) => {
                     eventMap[event] = cb;
                 }),
-                dispatchEvent: (event: string, params: any) => {
+                emit: (event: string, params: any) => {
                     eventMap[event](params);
                 }
             };
@@ -39,9 +40,9 @@ describe('Segment Event Listener Adapter Test', () => {
 
             const client = new SegmentEventListenerAdapter(eventConfig);
 
-            window['analytics'].dispatchEvent('track', { event: event1 });
-            window['analytics'].dispatchEvent('track', { event: event2 });
-            window['analytics'].dispatchEvent('track', { event: event3 });
+            window['analytics'].emit('track', event1);
+            window['analytics'].emit('track', event2);
+            window['analytics'].emit('track', event3);
 
             expect(emit.mock.calls.length).toBe(2);
             expect(emit.mock.calls[0]).toEqual([eventConfig[event1]]);
@@ -55,10 +56,11 @@ describe('Segment Event Listener Adapter Test', () => {
 
             // @ts-ignore
             window['analytics'] = {
-                addEventListener: jest.fn((event, cb) => {
+                ready: jest.fn(cb => cb()),
+                on: jest.fn((event, cb) => {
                     eventMap[event] = cb;
                 }),
-                dispatchEvent: (event: string, params: any) => {
+                emit: (event: string, params: any) => {
                     eventMap[event](params);
                 }
             };
@@ -69,9 +71,9 @@ describe('Segment Event Listener Adapter Test', () => {
 
             const client = new SegmentEventListenerAdapter({});
 
-            window['analytics'].dispatchEvent('track', { event: event1 });
-            window['analytics'].dispatchEvent('track', { event: event2 });
-            window['analytics'].dispatchEvent('track', { event: event3 });
+            window['analytics'].emit('track', event1);
+            window['analytics'].emit('track', event2);
+            window['analytics'].emit('track', event3);
 
             expect(emit.mock.calls.length).toBe(0);
         });
