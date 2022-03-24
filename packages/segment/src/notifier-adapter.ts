@@ -2,6 +2,7 @@ import { AnalyticsNotifierAdapter } from '@evolv-integrations/analytics-adapter'
 
 export class SegmentNotifierAdapter extends AnalyticsNotifierAdapter {
     constructor(
+        public parametersToReadFromSegment: Record<string, string> = {},
         public readonly maxWaitTime = 5000
     ) {
         super(maxWaitTime);
@@ -29,7 +30,9 @@ export class SegmentNotifierAdapter extends AnalyticsNotifierAdapter {
             });
         }
 
-        this.emit(`Evolv Event: ${type}`, value);
+        if (Object.values(this.parametersToReadFromSegment).indexOf(type) === -1) {
+            this.emit(`Evolv Event: ${type}`, value);
+        }
     }
 
     checkAnalyticsProviders(): void {
