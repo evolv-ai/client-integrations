@@ -17,7 +17,6 @@ export abstract class EventListenerAdapter extends Awaiter {
 
     onEvolvFound() {
         this.evolvReady = true;
-
         if (this.eventsToEmitWhenEvolvReady.length) {
             this.applyEventData(this.eventsToEmitWhenEvolvReady);
             this.eventsToEmitWhenEvolvReady = [];
