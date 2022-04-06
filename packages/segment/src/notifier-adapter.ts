@@ -42,10 +42,7 @@ export class SegmentNotifierAdapter extends AnalyticsNotifierAdapter {
         };
 
         if (type === 'confirmed' && event.group_id) {
-            let combinationName = event.ordinal > 0
-                ? `Combination ${event.ordinal}`
-                : 'Control';
-
+            const combinationName = `Combination ${event.ordinal}`;
             const experimentName = `Experiment: Evolv Optimization ${event.group_id}`;
 
             this.emit('Experiment Viewed', {
