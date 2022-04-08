@@ -10,7 +10,7 @@
     "clean": "del dist **/*.tsbuildinfo",
     "prebuild": "npm run clean",
     "build": "rollup --config ./rollup.config.js",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "prepublishOnly": "npm run build",
     "prepack": "npm run build"
   },

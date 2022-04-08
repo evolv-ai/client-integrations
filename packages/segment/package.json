@@ -1,7 +1,7 @@
 {
-  "name": "@evolv-integrations/quantum-metric",
-  "version": "1.0.2",
-  "description": "Evolv integration code for Quantum Metric",
+  "name": "@evolv-integrations/segment",
+  "version": "1.0.0",
+  "description": "Evolv integration code for Segment",
   "private": false,
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -10,7 +10,7 @@
     "clean": "del dist **/*.tsbuildinfo",
     "prebuild": "npm run clean",
     "build": "rollup --config ./rollup.config.js",
-    "test": "jest --passWithNoTests",
+    "test": "jest",
     "prepublishOnly": "npm run build",
     "prepack": "npm run build"
   },
@@ -27,7 +27,7 @@
     "dist/**/*"
   ],
   "dependencies": {
-    "@evolv-integrations/analytics-adapter": "^2.0.0"
+    "@evolv-integrations/analytics-adapter": "^2.1.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^19.0.0",
