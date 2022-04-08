@@ -19,7 +19,7 @@ export class SegmentEventListenerAdapter extends EventListenerAdapter {
         this.getAnalytics().ready(() => {
             // @ts-ignore
             const getSegmentDataLayerEvents = window.dataLayer
-                && window.dataLayer.filter(event => event.hasOwnProperty('segmentAnonymousId'));
+                && window.dataLayer.filter(event => event.hasOwnProperty('segmentAnonymousId')) || [{}];
 
             if (getSegmentDataLayerEvents.length > 0) {
                 getSegmentDataLayerEvents.forEach(({ event: name, ...properties }) => {

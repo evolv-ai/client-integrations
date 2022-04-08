@@ -9,6 +9,6 @@ declare global {
         analytics: any;
         evolv: any;
         evolvPreload: any;
-        dataLayer: dataLayer[];
+        dataLayer?: dataLayer[];
     }
 }

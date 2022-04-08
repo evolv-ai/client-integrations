@@ -41,16 +41,20 @@ export class SegmentNotifierAdapter extends AnalyticsNotifierAdapter {
             return eventsMap.indexOf(type) === -1;
         };
 
-        if (type === 'confirmed' && event.group_id) {
-            const combinationName = `Combination ${event.ordinal}`;
-            const experimentName = `Experiment: Evolv Optimization ${event.group_id}`;
+        if (type === 'confirmed' || type === 'contaminated') {
+            const experimentMetaData: any = {};
+            const eventName = type === 'confirmed' ? 'Experiment Viewed' : 'Experiment Contaminated';
 
-            this.emit('Experiment Viewed', {
-                experiment_id: event.eid,
-                experiment_name: experimentName,
-                variation_id: event.cid,
-                variation_name: combinationName,
-                nonInteraction: 1
+            if ( event.group_id) {
+                experimentMetaData.experiment_id = event.eid;
+                experimentMetaData.experiment_name = `Experiment: Evolv Optimization ${event.group_id}`;
+                experimentMetaData.variation_id = event.cid;
+                experimentMetaData.variation_name = `Combination ${event.ordinal}`;
+            }
+
+            this.emit(eventName, {
+                nonInteraction: 1,
+                ...experimentMetaData
             });
         } else if (isEvolvEvent(type)) {
             this.emit(`Evolv Event: ${type}`, value);
