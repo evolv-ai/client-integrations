@@ -32,7 +32,7 @@ export class SegmentNotifierAdapter extends AnalyticsNotifierAdapter {
         const isEvolvEvent = (name: string) => {
             const eventsMap = Object
                 .values(this.parametersToReadFromSegment)
-                .map((param) =>
+                .map(param =>
                     Array.isArray(param)
                         ? param.map(({ event }: { event: string }) => event)
                         : param
