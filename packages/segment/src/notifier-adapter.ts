@@ -49,6 +49,7 @@ export class SegmentNotifierAdapter extends AnalyticsNotifierAdapter {
             const experimentMetaData: any = {};
             const eventName = type === 'confirmed' ? 'Experiment Viewed' : 'Experiment Contaminated';
             const experimentName = this.experimentNames[event.group_id] || `Experiment: Evolv Optimization ${event.group_id}`;
+
             if (event.group_id) {
                 experimentMetaData.experiment_id = event.eid;
                 experimentMetaData.experiment_name = experimentName;
