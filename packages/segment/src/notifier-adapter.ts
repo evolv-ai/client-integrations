@@ -30,22 +30,23 @@ export class SegmentNotifierAdapter extends AnalyticsNotifierAdapter {
             });
         }
         const isEvolvEvent = (name: string) => {
-            const eventsMap = Object.values(this.parametersToReadFromSegment);
+            const eventsMap = Object
+                .values(this.parametersToReadFromSegment)
+                .map(param =>
+                    Array.isArray(param)
+                        ? param.map(({ event }: { event: string }) => event)
+                        : param
+                )
+                .reduce((acc, curr) => acc.concat(curr), []);
 
-            if (Array.isArray(this.parametersToReadFromSegment[name])) {
-                this.parametersToReadFromSegment[name].forEach(({ event }: { event: string }) => {
-                    eventsMap.push(event);
-                });
-            } 
-
-            return eventsMap.indexOf(type) === -1;
+            return eventsMap.indexOf(name) === -1;
         };
 
         if (type === 'confirmed' || type === 'contaminated') {
             const experimentMetaData: any = {};
             const eventName = type === 'confirmed' ? 'Experiment Viewed' : 'Experiment Contaminated';
 
-            if ( event.group_id) {
+            if (event.group_id) {
                 experimentMetaData.experiment_id = event.eid;
                 experimentMetaData.experiment_name = `Experiment: Evolv Optimization ${event.group_id}`;
                 experimentMetaData.variation_id = event.cid;
