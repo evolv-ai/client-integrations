@@ -1,4 +1,4 @@
-## Evolv Segment Integration
+# Evolv Segment Integration
 
 ## Usage
 When using the Segment integration, a map of Segment events to listen for and their respective Evolv events should be passed into the config in `parametersToReadFromSegment`.
@@ -61,6 +61,65 @@ Example:
         },
         "event": "checkout-page-viewed-step-3"
       }]
+    }
+  }
+}
+```
+
+## Confirmation and Contamination events
+
+When Evolv emits a confirmation or contamination event, a Segment `track` event will automatically be emitted in the following formats:
+
+### Confirmation
+```json
+{
+  "event": "Experiment Viewed",
+  "properties": {
+    "experimentId": "<Experiment Group ID>",
+    "experimentName": "Evolv Experiment: <Evolv Group ID>",
+    "variationId": "<Evolv Combination ID>",
+    "variationName": "<Evolv Combination Name>"
+  }
+}
+```
+
+### Contamination
+```json
+{
+  "event": "Experiment Contaminated",
+  "properties": {
+    "experimentId": "<Experiment Group ID>",
+    "experimentName": "Evolv Experiment: <Evolv Group ID>",
+    "variationId": "<Evolv Combination ID>",
+    "variationName": "<Evolv Combination Name>"
+  }
+}
+```
+
+### Other events
+All other events fired from Evolv will emitted as a Segment `track` event in the following format:
+
+```json
+{
+  "event": "Evolv Event: <Evolv Event Name>"
+}
+```
+
+
+## Using readable experiment names
+*Note: this feature is __not recommended__ since it requires manually updating/adding experiment names.*
+
+The `experimentNames` config parameter can be used to pass user-friendly/readable experiment names to be used in the `Experiment Viewed` and `Experiment Contaminated` events. You can pass an object containing a map of `group_id`s to `experimentName`s.
+
+```json
+{
+  "eventListenerAdapter": {
+    "parametersToReadFromSegment": {
+      "Checkout Page Viewed": "checkout-page-viewed"
+    },
+    "experimentNames": {
+      "450daa63-07a3-4859-8153-074fda34bb": "My Experiment Name",
+      "444ada66-70b1-3453-6325-980fdb234a": "My Other Experiment Name"
     }
   }
 }

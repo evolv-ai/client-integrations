@@ -3,6 +3,7 @@ import { AnalyticsNotifierAdapter } from '@evolv-integrations/analytics-adapter'
 export class SegmentNotifierAdapter extends AnalyticsNotifierAdapter {
     constructor(
         public parametersToReadFromSegment: Record<string, any> = {},
+        public experimentNames: Record<string, string> = {},
         public readonly maxWaitTime = 5000
     ) {
         super(maxWaitTime);
@@ -29,25 +30,28 @@ export class SegmentNotifierAdapter extends AnalyticsNotifierAdapter {
                 cid: event.cid
             });
         }
-        const isEvolvEvent = (name: string) => {
-            const eventsMap = Object.values(this.parametersToReadFromSegment);
 
-            if (Array.isArray(this.parametersToReadFromSegment[name])) {
-                this.parametersToReadFromSegment[name].forEach(({ event }: { event: string }) => {
-                    eventsMap.push(event);
-                });
-            } 
+        // Checks if event name is in the list of Segment events
+        const isSegmentEvent = (name: string) => {
+            const eventsMap = Object
+                .values(this.parametersToReadFromSegment)
+                .map(param =>
+                    Array.isArray(param)
+                        ? param.map(({ event }: { event: string }) => event)
+                        : param
+                )
+                .reduce((acc, curr) => acc.concat(curr), []);
 
-            return eventsMap.indexOf(type) === -1;
+            return eventsMap.indexOf(name) !== -1;
         };
 
         if (type === 'confirmed' || type === 'contaminated') {
             const experimentMetaData: any = {};
             const eventName = type === 'confirmed' ? 'Experiment Viewed' : 'Experiment Contaminated';
-
-            if ( event.group_id) {
-                experimentMetaData.experiment_id = event.eid;
-                experimentMetaData.experiment_name = `Experiment: Evolv Optimization ${event.group_id}`;
+            const experimentName = this.experimentNames[event.group_id] || `Experiment: Evolv Optimization ${event.group_id}`;
+            if (event.group_id) {
+                experimentMetaData.experiment_id = event.group_id;
+                experimentMetaData.experiment_name = experimentName;
                 experimentMetaData.variation_id = event.cid;
                 experimentMetaData.variation_name = `Combination ${event.ordinal}`;
             }
@@ -56,7 +60,7 @@ export class SegmentNotifierAdapter extends AnalyticsNotifierAdapter {
                 nonInteraction: 1,
                 ...experimentMetaData
             });
-        } else if (isEvolvEvent(type)) {
+        } else if (!isSegmentEvent(type)) {
             this.emit(`Evolv Event: ${type}`, value);
         }
     }
