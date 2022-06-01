@@ -1,8 +1,11 @@
 {
   "packages": [
     "packages/*",
+    "packages/adobe/*",
     "packages/google/*",
-    "packages/adobe/*"
+    "packages/evolv/*",
+    "packages/quantum-metric/*",
+    "packages/segment/*"
   ],
   "version": "independent",
   "command": {
