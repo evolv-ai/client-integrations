@@ -1,6 +1,6 @@
 {
   "name": "@evolv-integrations/mutate",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Evolv integration code for the Evolv Mutate library",
   "private": false,
   "main": "dist/index.js",
@@ -27,7 +27,7 @@
     "dist/**/*"
   ],
   "dependencies": {
-    "@evolv/mutate": "^1.2.2"
+    "@evolv/mutate": "^1.2.3"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^22.0.0",
