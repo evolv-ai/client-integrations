@@ -129,7 +129,7 @@ export abstract class Client {
     }
 
     getAugmentedOrdinal(event: any) {
-        if (!event.ordinal) {
+        if (event.ordinal === undefined) {
             return;
         }
         return 'ordinal-' + event.ordinal;
