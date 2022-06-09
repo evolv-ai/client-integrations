@@ -82,7 +82,7 @@ export abstract class AnalyticsNotifierAdapter extends Awaiter {
 	}
 
 	getAugmentedOrdinal(event: any) {
-		if (!event.ordinal) {
+		if (event.ordinal === undefined) {
 			return;
 		}
 		return 'ordinal-' + event.ordinal;
