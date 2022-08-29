@@ -44,3 +44,8 @@ QuantumMetric.default({
     }
 });                  
 ```
+
+**Required Steps with Quantum Metric**
+Evolv's integration can only write our events to a global object on the window -- ```window.evolvQuantumDataLayer```
+
+Quantum Metric need to configure their system to pick up values set here and pass them back.
