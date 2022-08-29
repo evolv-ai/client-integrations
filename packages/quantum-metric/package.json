@@ -1,6 +1,6 @@
 {
   "name": "@evolv-integrations/quantum-metric",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Evolv integration code for Quantum Metric",
   "private": false,
   "main": "dist/index.js",
