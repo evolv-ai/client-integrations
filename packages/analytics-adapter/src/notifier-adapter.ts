@@ -94,7 +94,7 @@ export abstract class AnalyticsNotifierAdapter extends Awaiter {
 		}
 		let cidEid = event.cid.split(':');
 		let eid = cidEid[1];
-		return await window.evolv.client.getDisplayName('experiments', eid);
+		return window.evolv.client.getDisplayName('experiments', eid);
 	}
 
 	getAugmentedGroupId(event: any) {
