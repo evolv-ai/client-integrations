@@ -88,6 +88,15 @@ export abstract class AnalyticsNotifierAdapter extends Awaiter {
 		return 'ordinal-' + event.ordinal;
 	}
 
+	getDisplayName(event: any) {
+		if (!event.cid) {
+			return;
+		}
+		let cidEid = event.cid.split(':');
+		let eid = cidEid[1];
+		return window.evolv.client.getDisplayName('experiments', eid);
+	}
+
 	getAugmentedGroupId(event: any) {
 		if (!event.group_id) {
 			return;
