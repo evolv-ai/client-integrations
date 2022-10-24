@@ -448,6 +448,12 @@ describe('Adapter Test', () => {
         });
 
         test('Retrieving display name', async () => {
+            let analytics = {
+                handler: jest.fn()
+            };
+            // @ts-ignore
+            window['example-analytics'] = analytics;
+
             let mockDisplayName = jest.fn(() => {
                 return Promise.resolve("Example Name");
             });
