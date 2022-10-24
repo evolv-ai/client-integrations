@@ -446,5 +446,32 @@ describe('Adapter Test', () => {
                 'uid': 'user1',
             }]]);
         });
+
+        test('Retrieving display name', async () => {
+            let analytics = {
+                handler: jest.fn()
+            };
+            // @ts-ignore
+            window['example-analytics'] = analytics;
+
+            let mockDisplayName = jest.fn(() => {
+                return Promise.resolve("Example Name");
+            });
+
+            window['evolv'] = {
+                client: {
+                    on: on,
+                    getDisplayName: mockDisplayName
+                }
+            };
+
+            const client = new ExampleAdapter();
+            let displayName = await client.getDisplayName({
+                cid: 'cid1:eid1'
+            })
+
+            expect(displayName).toEqual('Example Name');
+            expect(mockDisplayName).toBeCalledWith('experiments', 'eid1');
+        })
     });
 });
