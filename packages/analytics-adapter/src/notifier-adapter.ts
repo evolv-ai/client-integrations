@@ -88,7 +88,7 @@ export abstract class AnalyticsNotifierAdapter extends Awaiter {
 		return 'ordinal-' + event.ordinal;
 	}
 
-	async getDisplayName(event: any) {
+	getDisplayName(event: any) {
 		if (!event.cid) {
 			return;
 		}
