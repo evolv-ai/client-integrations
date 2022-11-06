@@ -29,8 +29,8 @@ export class GaAdapter extends AnalyticsNotifierAdapter {
     sendMetrics(type: string, event: any) {
         const namespace = this.namespace;
         const prefix = namespace ? namespace + '.' : '';
-        var augmentedSid = this.getAugmentedSid();
-        var augmentedUid = this.getAugmentedUid(event);
+        let augmentedSid = this.getAugmentedSid();
+        let augmentedUid = this.getAugmentedUid(event);
         let augmentedCidEid = this.getAugmentedCidEid(event);
         let augmentedGroupId = this.getAugmentedGroupId(event);
         let augmentedOrdinal = this.getAugmentedOrdinal(event);
