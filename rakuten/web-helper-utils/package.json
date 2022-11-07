@@ -1,0 +1,8 @@
+{
+  "name": "@evolv-delivery/web-helper-utils",
+  "version": "1.0.0",
+  "description": "A collection of helper functions.",
+  "main": "index.js",
+  "author": "Teo Lisitza",
+  "license": "ISC"
+}
