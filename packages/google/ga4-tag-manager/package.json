@@ -1,7 +1,7 @@
 {
-  "name": "@evolv-integrations/ga4-gtag",
-  "version": "1.0.0",
-  "description": "Evolv integration code for Google Analytics using GTag",
+  "name": "@evolv-integrations/ga4-tag-manager",
+  "version": "1.0.1",
+  "description": "Evolv integration code for Google Analytics 4 using Google Tag Manager",
   "private": false,
   "main": "dist/index.js",
   "module": "dist/index.mjs",
