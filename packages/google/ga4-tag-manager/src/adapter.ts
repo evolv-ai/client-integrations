@@ -8,11 +8,11 @@ export class TagManagerAdapter extends AnalyticsNotifierAdapter {
 	}
 
 	getAnalytics() {
-		return window.google_tag_manager;
+		return window.dataLayer.push;
 	}
 
 	getHandler() {
-		return window.dataLayer.push;
+		return this.getAnalytics();
 	}
 
 	checkAnalyticsProviders() {
@@ -28,7 +28,7 @@ export class TagManagerAdapter extends AnalyticsNotifierAdapter {
 			}
 		});
 
-		if (!ga4Config)	console.log('Evolv: GA4 config not detected. Please ensure you have added a GA4 config tag to your GTM container.');
+		if (ga4Config)	console.log('Evolv: GA4 config not detected. Please ensure you have added a GA4 config tag to your GTM container.');
 	};
 
 	sendMetrics(type: string, event: any) {
