@@ -39,7 +39,7 @@ export class TagManagerAdapter extends AnalyticsNotifierAdapter {
 			'non_interaction': true
 		};
 
-		const eventProperties = ['group_id', 'eid', 'cid', 'ordinal'];
+		const eventProperties = ['group_id', 'eid', 'cid', 'ordinal', 'excluded'];
 
 		eventProperties.forEach((property) => {
 			if (!dataMap[property]) {
