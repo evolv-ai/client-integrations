@@ -8,7 +8,7 @@ export class TagManagerAdapter extends AnalyticsNotifierAdapter {
 	}
 
 	getAnalytics() {
-		return window.google_tag_manager;
+		return window.google_tag_manager && window.dataLayer;
 	}
 
 	getHandler() {
