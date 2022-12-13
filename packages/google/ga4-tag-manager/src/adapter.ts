@@ -49,14 +49,14 @@ export class TagManagerAdapter extends AnalyticsNotifierAdapter {
 
 		let evolvEvent = 'evolv';
 
-		window.evolv.context.set('GA4_Sending', true);
-		window.evolv.context.set('GA4_Handler_ready', !!this.getHandler());
+		window.evolv.context.set('ga_sending', true);
+		window.evolv.context.set('ga_handler_ready', !!this.getHandler());
 
 		this.emit({
 			event: evolvEvent,
 			evolvEventDetails: { ...dataMap }
 		});
 
-		window.evolv.context.set('GA4_Sent', true);
+		window.evolv.context.set('ga_sent', true);
 	}
 }
