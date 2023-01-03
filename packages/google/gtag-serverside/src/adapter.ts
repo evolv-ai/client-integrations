@@ -48,6 +48,9 @@ export class GtagServersideAdapter extends AnalyticsNotifierAdapter {
 			groupActionString = `${evolvEvent}:${augmentedCidEid}`;
 		}
 
-		this.emit('event', augmentedCidEid ? groupActionString : evolvEvent, dataMap);
+		this.emit({
+			event: augmentedCidEid ? groupActionString : evolvEvent,
+			evolvEventDetails: { ...dataMap }
+		});
 	}
 }
