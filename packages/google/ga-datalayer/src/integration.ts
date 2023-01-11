@@ -1,4 +1,4 @@
-import { GtagServersideAdapter } from './adapter';
+import { GaDataLayerAdapter } from './adapter';
 
 export interface Config {
 	maxWaitTime?: number;
@@ -6,5 +6,5 @@ export interface Config {
 }
 
 export function integration(config: Config): void {
-	new GtagServersideAdapter(config.maxWaitTime, config.includeCidEid);
+	new GaDataLayerAdapter(config.maxWaitTime, config.includeCidEid);
 }

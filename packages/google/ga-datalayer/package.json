@@ -1,6 +1,6 @@
 {
-  "name": "@evolv-integrations/google-analytics-gtag-serverside",
-  "version": "1.0.0",
+  "name": "@evolv-integrations/google-analytics-datalayer",
+  "version": "1.0.1",
   "description": "Evolv integration code for Google Analytics serverside using GTag",
   "private": false,
   "main": "dist/index.js",
