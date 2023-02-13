@@ -2,8 +2,7 @@ import { HeapNotifierAdapter } from './notifier-adapter';
 
 export interface Config {
 	dataAdapter: {
-		listenersParameters: Record<string, string>,
-		parametersToReadFromQuantum: Record<string, boolean>,
+		listenersParameters: Record<string, string>
 	},
 	maxWaitTime?: number;
 }

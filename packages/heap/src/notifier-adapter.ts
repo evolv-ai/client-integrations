@@ -17,14 +17,13 @@ export class HeapNotifierAdapter extends AnalyticsNotifierAdapter {
         return  this.getAnalytics();
     }
 
-    async sendMetrics(type: string, event: any) {
+    sendMetrics(type: string, event: any) {
         let value: Record<string, any> = {
             type
         };
 
         if (event.group_id) {
             value = Object.assign(value, {
-                projectName: await this.getDisplayName(event.eid),
                 groupId: event.group_id,
                 ordinal: event.ordinal,
                 cid: event.cid
