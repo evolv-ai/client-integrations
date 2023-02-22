@@ -39,7 +39,7 @@ export class GaAdapter extends AnalyticsNotifierAdapter {
 
         let evolvEvent = 'evolv-event';
 
-        let groupActionString;
+        let groupActionString : string;
         if (augmentedOrdinal) {
             groupActionString = `${evolvEvent}:${augmentedGroupId}:${augmentedOrdinal}`;
 
@@ -52,11 +52,19 @@ export class GaAdapter extends AnalyticsNotifierAdapter {
             groupActionString = `${evolvEvent}`;
         }
 
-        this.emit(prefix + 'send', 'event', {
-            'eventCategory': 'evolvids',
-            'eventAction': groupActionString,
-            'eventLabel': type + ':' + augmentedUid + ':' + augmentedSid,
-            'nonInteraction': true
-        });
+        this.getDisplayName(event).then((projectName: string) => {
+            const value = {
+                'eventCategory': 'evolvids',
+                'eventAction': groupActionString,
+                'eventLabel': type + ':' + augmentedUid + ':' + augmentedSid,
+                'nonInteraction': true
+            }
+
+            if (projectName) {
+                value.eventLabel += ':' + projectName;
+            }
+
+            this.emit(prefix + 'send', 'event', value);
+        })
     }
 }

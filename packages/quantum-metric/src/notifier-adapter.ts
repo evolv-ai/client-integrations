@@ -32,9 +32,19 @@ export class QuantumNotifierAdapter extends AnalyticsNotifierAdapter {
                 ordinal: event.ordinal,
                 cid: event.cid
             });
-        }
 
-        this.emit(value);
+            this.getDisplayName(event).then((projectName: string) => {
+                if (projectName) {
+                    value = Object.assign(value, {
+                        projectName
+                    });
+                }
+                
+                this.emit(value);
+            });
+        } else {
+            this.emit(value);
+        }
     }
 
     checkAnalyticsProviders(): void {

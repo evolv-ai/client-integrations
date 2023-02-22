@@ -23,15 +23,20 @@ export class GtagAdapter extends AnalyticsNotifierAdapter {
 	}
 
 	sendMetrics(type: string, event: any) {
-		let dataMap: { [key: string]: any; } = {
-			...event,
-			type, 
-			// name: await this.getDisplayName(event.eid),
-			'non_interaction': true
-		};
+		this.getDisplayName(event).then((projectName: string) => {
+			const dataMap: { [key: string]: any; } = {
+				...event,
+				type,
+				'non_interaction': true
+			};
 
-		let evolvEvent = 'evolv';
+			if (projectName) {
+				dataMap.projectName = projectName;
+			}
 
-		this.emit('event', evolvEvent, dataMap);
+			let evolvEvent = 'evolv';
+
+			this.emit('event', evolvEvent, dataMap);
+		})
 	}
 }

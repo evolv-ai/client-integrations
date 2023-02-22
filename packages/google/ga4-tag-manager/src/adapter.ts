@@ -32,31 +32,36 @@ export class TagManagerAdapter extends AnalyticsNotifierAdapter {
 	};
 
 	sendMetrics(type: string, event: any) {
-		let dataMap: { [key: string]: any; } = {
-			...event,
-			type,
-			// name: await this.getDisplayName(event.eid),
-			'non_interaction': true
-		};
+		this.getDisplayName(event).then((projectName: string) => {
+			let dataMap: { [key: string]: any; } = {
+				...event,
+				type,
+				'non_interaction': true
+			};
 
-		const eventProperties = ['group_id', 'eid', 'cid', 'ordinal', 'excluded', 'type'];
-
-		eventProperties.forEach((property) => {
-			if (!(property in dataMap)) {
-				dataMap[property] = undefined;
+			if (projectName) {
+				dataMap.projectName = projectName;
 			}
+
+			const eventProperties = ['group_id', 'eid', 'cid', 'ordinal', 'excluded', 'type'];
+
+			eventProperties.forEach((property) => {
+				if (!(property in dataMap)) {
+					dataMap[property] = undefined;
+				}
+			});
+
+			let evolvEvent = 'evolv';
+
+			window.evolv.context.set('ga_sending', true);
+			window.evolv.context.set('ga_handler_ready', !!this.getHandler());
+
+			this.emit({
+				event: evolvEvent,
+				evolvEventDetails: { ...dataMap }
+			});
+
+			window.evolv.context.set('ga_sent', true);
 		});
-
-		let evolvEvent = 'evolv';
-
-		window.evolv.context.set('ga_sending', true);
-		window.evolv.context.set('ga_handler_ready', !!this.getHandler());
-
-		this.emit({
-			event: evolvEvent,
-			evolvEventDetails: { ...dataMap }
-		});
-
-		window.evolv.context.set('ga_sent', true);
 	}
 }
