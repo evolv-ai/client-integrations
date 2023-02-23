@@ -90,7 +90,7 @@ export abstract class AnalyticsNotifierAdapter extends Awaiter {
 
 	getDisplayName(event: any) {
 		if (!event.cid) {
-			return;
+			return new Promise((res)=> res(''));
 		}
 		let cidEid = event.cid.split(':');
 		let eid = cidEid[1];
