@@ -60,8 +60,6 @@ export class TagManagerAdapter extends AnalyticsNotifierAdapter {
 				event: evolvEvent,
 				evolvEventDetails: { ...dataMap }
 			});
-
-			window.evolv.context.set('ga_sent', true);
 		});
 	}
 }
