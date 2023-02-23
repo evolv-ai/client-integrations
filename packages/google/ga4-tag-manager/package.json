@@ -1,6 +1,6 @@
 {
   "name": "@evolv-integrations/ga4-tag-manager",
-  "version": "1.0.8",
+  "version": "1.1.0",
   "description": "Evolv integration code for Google Analytics 4 using Google Tag Manager",
   "private": false,
   "main": "dist/index.js",
@@ -27,7 +27,7 @@
     "dist/**/*"
   ],
   "dependencies": {
-    "@evolv-integrations/analytics-adapter": "^2.2.0"
+    "@evolv-integrations/analytics-adapter": "^2.3.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^19.0.0",
