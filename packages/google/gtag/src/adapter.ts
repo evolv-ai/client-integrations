@@ -34,11 +34,9 @@ export class GtagAdapter extends AnalyticsNotifierAdapter {
 		let augmentedGroupId = this.getAugmentedGroupId(event);
 		let augmentedOrdinal = this.getAugmentedOrdinal(event);
 
-		dataMap['event_category'] = 'evolvids';
-		dataMap['event_label'] = type + ':' + augmentedUid + ':' + augmentedSid;
 		let evolvEvent = 'evolv-event';
 
-		let groupActionString;
+		let groupActionString: string;
 		if (augmentedOrdinal) {
 			groupActionString = `${evolvEvent}:${augmentedGroupId}:${augmentedOrdinal}`;
 
@@ -49,6 +47,17 @@ export class GtagAdapter extends AnalyticsNotifierAdapter {
 			groupActionString = `${evolvEvent}:${augmentedCidEid}`;
 		}
 
-		this.emit('event', augmentedCidEid ? groupActionString : evolvEvent, dataMap);
+
+		dataMap['event_category'] = 'evolvids';
+
+		this.getDisplayName(event).then((projectName: string) => {
+			dataMap['event_label'] = type + ':' + augmentedUid + ':' + augmentedSid;
+
+            if (projectName) {
+                dataMap['event_label'] += ':' + projectName;
+            }
+
+			this.emit('event', augmentedCidEid ? groupActionString : evolvEvent, dataMap);
+		})
 	}
 }
