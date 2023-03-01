@@ -10,7 +10,7 @@ export class HeapNotifierAdapter extends AnalyticsNotifierAdapter {
     }
 
     getAnalytics() {
-        return window.heap;
+        return window.heap.track;
     }
 
     getHandler(): AnalyticsHandler {
