@@ -10,13 +10,15 @@ jobs:
     name: Run Adapter Tests
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Node
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
-      - name: Checkout Ref
-        uses: actions/checkout@v1
-        # ref is not set as it should be using master only
+          registry-url: 'https://registry.npmjs.org'
+
       - name: Run Tests
         working-directory: ./packages/analytics-adapter/
         run: |
