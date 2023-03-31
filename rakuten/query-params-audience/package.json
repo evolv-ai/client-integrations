@@ -1,0 +1,8 @@
+{
+  "name": "@evolv-delivery/query-params-audience",
+  "version": "1.0.1",
+  "description": "Sets a local storage item when the URL matches a set of query parameters. Used to track paid or known users both new and returning.",
+  "main": "index.js",
+  "author": "Joshua Barnard",
+  "license": "ISC"
+}
