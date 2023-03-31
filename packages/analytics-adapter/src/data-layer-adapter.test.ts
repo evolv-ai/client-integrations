@@ -56,6 +56,14 @@ class ExampleDataLayerAdapter extends DataLayerAdapter {
     }
 }
 
+class ExampleDelayedDataLayerAdapter extends ExampleDataLayerAdapter {
+    initialized = false;
+
+    isInitilizated() {
+        return this.initialized;
+    }
+}
+
 function testAdapterContextUpdates(update: any, client: any, done: any) {
     expect(update.mock.calls.length).toBe(0);
 
@@ -174,6 +182,46 @@ describe('Data Layer Adapter Test', () => {
             // @ts-ignore
             window['example-analytics'] = jest.fn();
 
+            testAdapterContextUpdates(update, client, done);
+        });
+    });
+
+    describe('If neither are already loaded and delayed initilization is used', () => {
+        test('Validate context not set if initialized returns false', (done) => {
+            let update = jest.fn();
+
+            const client = new ExampleDelayedDataLayerAdapter();
+
+            window['evolv'] = {
+                context: {
+                    update: update
+                }
+            };
+
+            // @ts-ignore
+            window['example-analytics'] = jest.fn();
+
+            setTimeout(() => {
+                expect(update.mock.calls.length).toBe(0);
+                done();
+            }, client.interval * 1.5);
+        });
+
+        test('Validate context set if initialized returns true', (done) => {
+            let update = jest.fn();
+
+            const client = new ExampleDelayedDataLayerAdapter();
+
+            window['evolv'] = {
+                context: {
+                    update: update
+                }
+            };
+
+            // @ts-ignore
+            window['example-analytics'] = jest.fn();
+
+            client.initialized = true;
             testAdapterContextUpdates(update, client, done);
         });
     });
