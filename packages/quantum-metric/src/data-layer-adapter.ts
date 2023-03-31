@@ -5,7 +5,7 @@ const AVAILABLE_PARAMETERS_TO_READ = {
 };
 
 export class QuantumDataLayerAdapter extends DataLayerAdapter {
-
+    initialized = false;
 
     constructor(
         public listenersParameters: Record<string, string> = {},
@@ -28,6 +28,8 @@ export class QuantumDataLayerAdapter extends DataLayerAdapter {
 
         this.listenersParameters = { ...defaultListenerParams, ...listenersParameters };
         this.parametersToReadFromQuantum = { ...defaultParametersToReadFromQuantum, ...parametersToReadFromQuantum };
+
+        this.initialized = true;
     }
 
     getAnalytics() {
@@ -63,5 +65,9 @@ export class QuantumDataLayerAdapter extends DataLayerAdapter {
         return {
             quantumMetric: quantumMetric
         };
+    }
+
+    isInitilizated(): boolean {
+        return this.initialized;
     }
 }
