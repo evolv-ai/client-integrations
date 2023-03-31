@@ -19,7 +19,7 @@ export abstract class Awaiter {
     abstract onEvolvFound(): void;
 
     waitForAnalytics() {
-        if (this.getAnalytics()) {
+        if (this.getAnalytics() && this.isInitilizated()) {
             this.onAnalyticsFound();
             return;
         }
@@ -33,7 +33,7 @@ export abstract class Awaiter {
                 return;
             }
 
-            if (!this.getAnalytics()) {
+            if (!this.getAnalytics() || !this.isInitilizated()) {
                 return;
             }
 
@@ -48,7 +48,7 @@ export abstract class Awaiter {
     }
 
     waitForEvolv() {
-        if (this.getEvolv()) {
+        if (this.getEvolv() && this.isInitilizated()) {
             this.onEvolvFound();
             return;
         }
@@ -62,7 +62,7 @@ export abstract class Awaiter {
             }
 
             const evolv = this.getEvolv();
-            if (!evolv) {
+            if (!evolv || !this.isInitilizated()) {
                 return;
             }
 
@@ -70,6 +70,10 @@ export abstract class Awaiter {
 
             clearInterval(intervalId);
         }, this.interval);
+    }
+
+    isInitilizated() {
+        return true;
     }
 }
 
