@@ -2,17 +2,20 @@ import { AnalyticsNotifierAdapter } from '@evolv-integrations/analytics-adapter'
 
 export class TagManagerAdapter extends AnalyticsNotifierAdapter {
 	constructor(
-		public readonly maxWaitTime = 5000
+		public readonly maxWaitTime = 5000,
+		public readonly dataLayerName = 'dataLayer'
 	) {
 		super(maxWaitTime);
 	}
 
 	getAnalytics() {
-		return window.google_tag_manager && window.dataLayer;
+		// @ts-ignore
+		return window.google_tag_manager && window[this.dataLayerName];
 	}
 
 	getHandler() {
-		return window.dataLayer.push;
+		// @ts-ignore
+		return window[this.dataLayerName].push;
 	}
 
 	checkAnalyticsProviders() {
