@@ -10,7 +10,7 @@ export class TagManagerAdapter extends AnalyticsNotifierAdapter {
 
 	getAnalytics() {
 		// @ts-ignore
-		return window.google_tag_manager && window[this.dataLayerName] && window[this.dataLayerName].findIndex(i => i.event === 'gtm.load') > -1;
+		return window.google_tag_manager && window[this.dataLayerName];
 	}
 
 	getHandler() {
