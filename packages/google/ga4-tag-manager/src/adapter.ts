@@ -6,6 +6,8 @@ export class TagManagerAdapter extends AnalyticsNotifierAdapter {
 		public readonly dataLayerName = 'dataLayer'
 	) {
 		super(maxWaitTime);
+		// @ts-ignore
+		window[dataLayerName] = window[dataLayerName] || [];
 	}
 
 	getAnalytics() {
