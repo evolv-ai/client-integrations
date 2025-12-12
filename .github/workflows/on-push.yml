@@ -9,6 +9,9 @@ jobs:
   publish:
     name: Publish
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write # NPM Trusted Publisher (eliminates need for NPM_TOKEN)
+      contents: write
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -29,7 +32,5 @@ jobs:
           npx lerna run build
 
       - name: Publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          npx lerna publish from-package --yes --no-verify-access
+          npx lerna publish from-package --yes --no-verify-access --provenance
